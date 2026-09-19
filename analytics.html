@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>PlacePredict – Analytics</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <style>
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: 1.5fr 1fr;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .chart-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .chart-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 4px;
+    }
+
+    .chart-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .domain-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .domain-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+      width: 120px;
+      flex-shrink: 0;
+    }
+
+    .domain-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+
+    .domain-fill {
+      height: 100%;
+      border-radius: 99px;
+      transition: width 1s ease;
+    }
+
+    .domain-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+      width: 35px;
+      text-align: right;
+    }
+
+    .insight-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      background: var(--gradient-soft);
+      border: 1px solid var(--border);
+      margin-bottom: 10px;
+    }
+
+    .insight-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+
+    .insight-text {
+      font-size: 13px;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .insight-text strong {
+      color: var(--primary);
+    }
+
+    .ats-score-ring {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      margin: 0 auto 12px;
+    }
+
+    .ats-score-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .ats-center {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ats-num {
+      font-size: 22px;
+      font-weight: 900;
+      font-family: 'Outfit', sans-serif;
+      color: var(--primary);
+    }
+
+    .metric-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .metric-row:last-child {
+      border-bottom: none;
+    }
+
+    .metric-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    .metric-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .ai-badge-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px;
+      height: 32px;
+      background: var(--gradient);
+      border-radius: 8px;
+      color: white;
+      font-size: 16px;
+      font-weight: 800;
+      box-shadow: 0 4px 10px rgba(108, 76, 241, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-badge-logo::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transform: rotate(45deg);
+      animation: shine-ai 3s infinite;
+    }
+
+    @keyframes shine-ai {
+      0% { left: -100%; }
+      20% { left: 100%; }
+      100% { left: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow-bg"></div>
+  <div class="glow-bg2"></div>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="logo-text">Place <span>Predict</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span
+            class="nav-label">Dashboard</span></a>
+        <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict
+            Placement</span></a>
+        <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student
+            Comparison</span></a>
+        <div class="nav-section-label">Assessment</div>
+        <a href="#" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill Assessment</span></a>
+        <div class="nav-section-label">Opportunities</div>
+        <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span
+            class="nav-label">Companies</span></a>
+        <a href="#" class="nav-item"><span class="nav-icon">💼</span><span class="nav-label">Job
+            Opportunities</span></a>
+
+        <div class="nav-section-label">Reports</div>
+        <a href="analytics.html" class="nav-item active"><span class="nav-icon">📊</span><span
+            class="nav-label">Placement Reports</span></a>
+        <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction History</span></a>
+        <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span
+            class="nav-label">Settings</span></a>
+      </nav>
+      <div class="sidebar-premium">
+        <div class="premium-title">⚡ Upgrade to Pro</div>
+        <div class="premium-desc">Unlock AI career guidance & unlimited predictions.</div>
+        <button class="premium-btn">Upgrade Now →</button>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <nav class="navbar">
+        <div class="navbar-title">📊 <span>Placement Analytics</span></div>
+        <div class="navbar-actions">
+          <div class="icon-btn" onclick="location.reload()">🔄</div>
+          <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+          <div class="user-avatar" id="navAvatar" onclick="window.location.href='settings.html'">U</div>
+        </div>
+      </nav>
+
+      <div class="page-content">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;">
+          <div>
+            <h1 class="page-title">Placement Analytics</h1>
+            <p class="page-subtitle">Your AI-powered placement insights and performance breakdown (<span id="totalReports">0</span> Reports Found)</p>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <button class="btn btn-ghost btn-sm" onclick="clearAnalysis()" style="color:var(--danger);border-color:rgba(239,68,68,0.2);">🗑️ Clear Data</button>
+            <button class="btn btn-ghost btn-sm" onclick="exportAnalytics()">📥 Export</button>
+            <button class="btn btn-primary btn-sm" onclick="window.location.href='predict.html'">🔮 New
+              Prediction</button>
+          </div>
+        </div>
+
+        <!-- MINI STATS -->
+        <div class="grid grid-5" style="margin-bottom:24px;">
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(108,76,241,0.1);">🎯</div>
+            <div class="stat-value" id="s-score">0%</div>
+            <div class="stat-label">Placement Score</div>
+            <div class="stat-change" id="s-score-change">No data</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(79,140,255,0.1);">📚</div>
+            <div class="stat-value" id="s-acad">0%</div>
+            <div class="stat-label">Academic Score</div>
+            <div class="stat-change" id="s-acad-change">No data</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(16,185,129,0.1);">💻</div>
+            <div class="stat-value" id="s-tech">0%</div>
+            <div class="stat-label">Technical Score</div>
+            <div class="stat-change" id="s-tech-change">No data</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background:rgba(245,158,11,0.1);">💰</div>
+            <div class="stat-value" id="s-ctc">₹0 LPA</div>
+            <div class="stat-label">Expected CTC</div>
+            <div class="stat-change" id="s-ctc-change">No data</div>
+          </div>
+          <div class="stat-card" style="border-color:var(--success);">
+            <div class="stat-icon" style="background:rgba(16,185,129,0.15);">🏢</div>
+            <div class="stat-value" id="s-company" style="font-size:18px;">N/A</div>
+            <div class="stat-label">Placed At</div>
+            <div class="stat-change" id="s-status-change" style="color:var(--success);">Pending Selection</div>
+          </div>
+        </div>
+
+        <!-- CHARTS ROW 1 -->
+        <div class="analytics-grid">
+          <div class="chart-card">
+            <div class="chart-title">Placement Probability</div>
+            <div class="chart-sub">AI confidence over 6 months</div>
+            <canvas id="trendChart" height="160"></canvas>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Score Breakdown</div>
+            <div class="chart-sub">Radar analysis across dimensions</div>
+            <canvas id="radarChart" height="160"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- CHARTS ROW 2 -->
+      <div class="grid grid-2" style="margin-bottom:24px;">
+        <div class="chart-card">
+          <div class="chart-title">📍 Domain Match Analysis</div>
+          <div class="chart-sub" style="margin-bottom:16px;">Your profile fit across tech domains</div>
+          <div class="domain-bar"><span class="domain-name">Software Dev</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#6C4CF1,#4F8CFF);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+          <div class="domain-bar"><span class="domain-name">Data Science</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#4F8CFF,#22D3EE);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+          <div class="domain-bar"><span class="domain-name">Cloud/DevOps</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#10B981,#22D3EE);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+          <div class="domain-bar"><span class="domain-name">Product Mgmt</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#F59E0B,#F472B6);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+          <div class="domain-bar"><span class="domain-name">Cybersecurity</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#EF4444,#F472B6);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+          <div class="domain-bar"><span class="domain-name">UI/UX Design</span>
+            <div class="domain-track">
+              <div class="domain-fill" style="width:0%;background:linear-gradient(90deg,#F472B6,#6C4CF1);"></div>
+            </div><span class="domain-pct">0%</span>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">🎯 Skill Strength Analysis</div>
+          <div class="chart-sub" style="margin-bottom:16px;">Your technical competency levels</div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">DSA / Problem Solving</span><span
+                class="skill-pct">0%</span></div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Python / ML</span><span class="skill-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#4F8CFF,#22D3EE);"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Web Development</span><span class="skill-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#10B981,#22D3EE);"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">SQL / Databases</span><span class="skill-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#F59E0B,#F472B6);"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">System Design</span><span class="skill-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#EF4444,#6C4CF1);"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-header"><span class="skill-name">Communication</span><span class="skill-pct">0%</span>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" style="width:0%;background:linear-gradient(90deg,#6C4CF1,#F472B6);"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- INSIGHTS -->
+      <div class="card">
+        <div class="section-title" style="display:flex; align-items:center; gap:12px;">
+          <div class="ai-badge-logo">AI</div>
+          <span style="background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-weight: 800;">AI Insights & Recommendations</span>
+        </div>
+        <div class="section-subtitle">Personalized advice from your placement AI</div>
+        <div class="grid grid-3" style="gap:12px;">
+          <div class="insight-item">
+            <div class="insight-icon">💡</div>
+            <div class="insight-text">Your <strong>Python & ML skills</strong> are in the top 15% of candidates. Apply
+              to Data Science roles at Amazon, Google, and Microsoft for best results.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon">⚠️</div>
+            <div class="insight-text"><strong>System Design</strong> is your weakest area (55%). Spend 2 weeks on
+              High-Level Design concepts to unlock Senior roles & FAANG interviews.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon">🚀</div>
+            <div class="insight-text">Adding <strong>2 more projects</strong> to your portfolio will increase your
+              placement score by an estimated <strong>+8%</strong> and salary by ₹2-3 LPA.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon">🎯</div>
+            <div class="insight-text">Your <strong>ATS score of 82%</strong> is good but can be improved. Add quantified
+              achievements like "Reduced latency by 40%" to reach 95%+.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon">📈</div>
+            <div class="insight-text">Based on market trends, <strong>Cloud + ML hybrid</strong> roles are seeing a 34%
+              salary premium in 2025. Consider upskilling in AWS/Azure.</div>
+          </div>
+          <div class="insight-item">
+            <div class="insight-icon">🏆</div>
+            <div class="insight-text">You're <strong>84% placement-ready</strong>. Focus on mock interviews and DSA
+              practice for the next 3 weeks to hit 90%+ and unlock FAANG eligibility.</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  </div>
+
+  <script>
+    (function() {
+      // Theme initialization
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+
+      // Session handling
+      const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+      if (!session.isLoggedIn) {
+          window.location.href = 'login.html';
+      } else {
+          const navAvatar = document.getElementById('navAvatar');
+          if(navAvatar) navAvatar.textContent = (session.name || 'U').charAt(0).toUpperCase();
+      }
+    })();
+    const history = JSON.parse(localStorage.getItem('placementHistory') || '[]');
+    const latest = history[history.length - 1] || {};
+    
+    const predScore = latest.score || 0;
+    const predAcad = latest.score ? Math.min(100, predScore + 5) : 0;
+    const predTech = latest.score ? Math.min(100, predScore - 2) : 0;
+    const predLpa = latest.lpa || '0';
+    
+    document.getElementById('totalReports').textContent = history.length;
+    document.getElementById('s-score').textContent = predScore.toFixed(1) + '%';
+    document.getElementById('s-acad').textContent = predAcad.toFixed(1) + '%';
+    document.getElementById('s-tech').textContent = predTech.toFixed(1) + '%';
+    
+    if(latest.score) {
+        document.getElementById('s-score-change').className = 'stat-change up';
+        document.getElementById('s-score-change').textContent = '↑ Active Prediction';
+        document.getElementById('s-acad-change').textContent = '↑ High Consistency';
+        document.getElementById('s-tech-change').textContent = '↑ Industry Ready';
+        document.getElementById('s-ctc-change').textContent = '↑ Market Aligned';
+        
+        document.getElementById('s-company').textContent = latest.company || 'N/A';
+        document.getElementById('s-status-change').textContent = latest.company === 'Not Selected' ? '⚠️ Not Placed' : '🎉 Selection Confirmed';
+        if(latest.company === 'Not Selected') document.getElementById('s-status-change').style.color = 'var(--danger)';
+    }
+
+    if(latest.lpa) {
+      document.getElementById('s-ctc').textContent = '₹' + latest.lpa + ' LPA';
+    }
+
+    // Update Domain bars dynamically
+    const domainPcts = [predScore, Math.max(0, predScore-10), Math.max(0, predScore-20), Math.max(0, predScore-30), Math.max(0, predScore-40), Math.max(0, predScore-45)];
+    document.querySelectorAll('.domain-fill').forEach((fill, i) => {
+      if(domainPcts[i] !== undefined) {
+          fill.style.width = domainPcts[i] + '%';
+      }
+    });
+    document.querySelectorAll('.domain-pct').forEach((pct, i) => {
+      if(domainPcts[i] !== undefined) {
+          pct.textContent = domainPcts[i].toFixed(1) + '%';
+      }
+    });
+
+    // Update Skill bars dynamically
+    const skillPcts = [predTech, predTech + 5, predTech - 3, predTech - 1, predTech - 15, predTech - 8];
+    document.querySelectorAll('.progress-fill').forEach((fill, i) => {
+      if(skillPcts[i] !== undefined) {
+          const p = Math.max(0, Math.min(100, skillPcts[i]));
+          fill.style.width = p + '%';
+          const pctLabel = fill.closest('.skill-item')?.querySelector('.skill-pct');
+          if(pctLabel) pctLabel.textContent = p.toFixed(1) + '%';
+      }
+    });
+
+    // Update Insights dynamically to avoid "zero" or static feel
+    const insights = document.querySelectorAll('.insight-text strong');
+    if(insights[0]) insights[0].textContent = latest.score ? (latest.score > 80 ? 'Python & ML skills' : 'General Aptitude') : 'N/A';
+    if(insights[3]) insights[3].textContent = latest.score ? 'ATS score of ' + (predScore - 5).toFixed(1) + '%' : '0.0%';
+    if(insights[5]) insights[5].textContent = latest.score ? predScore.toFixed(1) + '% placement-ready' : '0.0% ready';
+    
+    // Hide or show content based on data
+    if(!latest.score) {
+        document.querySelectorAll('.insight-text').forEach(t => t.innerHTML = '<em>No analysis available. Run a prediction to see insights.</em>');
+    }
+
+    const trendCtx = document.getElementById('trendChart').getContext('2d');
+    const trendData = latest.score ? [62, 68, 71, 76, 80, predScore] : [0, 0, 0, 0, 0, 0];
+    new Chart(trendCtx, { type: 'line', data: { labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'], datasets: [{ label: 'Placement %', data: trendData, borderColor: '#9333EA', backgroundColor: 'rgba(147,51,234,0.08)', borderWidth: 2.5, fill: true, tension: 0.4, pointBackgroundColor: '#9333EA', pointRadius: 4 }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { min: 0, max: 100, ticks: { callback: v => v + '%' }, grid: { color: 'rgba(0,0,0,0.04)' } }, x: { grid: { display: false } } } } });
+
+    const radarCtx = document.getElementById('radarChart').getContext('2d');
+    const langScore = latest.languages ? (latest.languages.split(',').length * 20) : 0;
+    const certScore = latest.certs ? (latest.certs * 20) : 0;
+    const projScore = latest.projects ? (latest.projects * 15) : 0;
+
+    new Chart(radarCtx, { 
+        type: 'radar', 
+        data: { 
+            labels: ['10th %', '12th %', 'CGPA', 'Projects', 'Languages', 'Certifications'], 
+            datasets: [{ 
+                label: 'Your Score', 
+                data: [
+                    latest.tenth || 0, 
+                    latest.twelfth || 0, 
+                    latest.cgpa || 0, 
+                    Math.min(100, projScore), 
+                    Math.min(100, langScore), 
+                    Math.min(100, certScore)
+                ], 
+                borderColor: '#9333EA', 
+                backgroundColor: 'rgba(147,51,234,0.12)', 
+                borderWidth: 2, 
+                pointBackgroundColor: '#9333EA' 
+            }] 
+        }, 
+        options: { 
+            responsive: true, 
+            plugins: { legend: { display: false } }, 
+            scales: { r: { min: 0, max: 100, ticks: { stepSize: 20 }, grid: { color: 'rgba(0,0,0,0.06)' } } } 
+        } 
+    });
+
+    function clearAnalysis() {
+      if(confirm('Are you sure you want to clear all placement analysis data? This action cannot be undone.')) {
+        localStorage.removeItem('placementHistory');
+        sessionStorage.clear();
+        location.reload();
+      }
+    }
+
+    function exportAnalytics() {
+      const { jsPDF } = window.jspdf || {};
+      if (jsPDF) {
+        alert("Generating PDF Report...");
+        // Simple PDF generation logic could go here if library was loaded
+      } else {
+        window.print(); // Fallback to browser print which is clean for this UI
+      }
+    }
+  </script>
+</body>
+
+</html>

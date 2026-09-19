@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PlacePredict – Skill Assessment</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+  <div class="glow-bg"></div>
+  <div class="glow-bg2"></div>
+  <div class="app-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="logo-text">Place <span>Predict</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span
+            class="nav-label">Dashboard</span></a>
+        <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict
+            Placement</span></a>
+        <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student
+            Comparison</span></a>
+        <div class="nav-section-label">Assessment</div>
+        <a href="assessment.html" class="nav-item active"><span class="nav-icon">🧩</span><span class="nav-label">Skill
+            Assessment</span></a>
+        <div class="nav-section-label">Opportunities</div>
+        <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span
+            class="nav-label">Companies</span></a>
+        <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction
+            History</span></a>
+        <div class="nav-section-label">Reports</div>
+        <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement
+            Reports</span></a>
+        <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span
+            class="nav-label">Settings</span></a>
+      </nav>
+    </aside>
+
+    <div class="main-content">
+      <!-- NAVBAR -->
+      <nav class="navbar">
+        <div class="navbar-title">Skill <span>Assessment</span></div>
+        <div class="navbar-actions">
+          <div class="icon-btn" onclick="location.reload()">🔄</div>
+          <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+          <div class="user-info-nav" style="display:flex; align-items:center; gap:12px; cursor:pointer;"
+            onclick="window.location.href='settings.html'">
+            <div style="text-align:right;">
+              <div style="font-size:13px; font-weight:800; color:var(--text-primary);" id="navName">Student</div>
+              <div style="font-size:11px; color:var(--text-muted);">Career Path: Tech</div>
+            </div>
+            <div class="user-avatar" id="navAvatar">S</div>
+            <span style="font-size:10px; color:var(--text-muted);">▼</span>
+          </div>
+        </div>
+      </nav>
+
+      <div class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">Skill Assessment</h1>
+          <p class="page-subtitle">Evaluate your skills, identify strengths and get AI-powered recommendations</p>
+        </div>
+
+        <!-- HERO BANNER -->
+        <div class="assessment-hero animate-fade-up">
+          <div class="assessment-hero-content">
+            <h2 class="assessment-hero-title">Discover Your True Potential</h2>
+            <p class="assessment-hero-desc">Our AI assesses your technical, problem solving and soft skills to help you
+              stand out from the crowd.</p>
+            <button class="btn btn-primary" style="background:#fff; color:var(--primary); box-shadow:none;"
+              onclick="startAssessment('Technical')">Start New
+              Assessment</button>
+          </div>
+          <div class="assessment-hero-image">
+            <div class="assessment-3d-elements">📊📋🤖</div>
+          </div>
+        </div>
+
+        <div class="analytics-layout">
+          <div class="analytics-left">
+            <!-- CATEGORIES -->
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+              <h3 class="section-title" style="margin-bottom:0;">Choose Assessment Category</h3>
+              <a href="#" style="font-size:13px; color:var(--primary); font-weight:700;">View All</a>
+            </div>
+            <div class="assessment-grid">
+              <div class="assessment-card animate-fade-up">
+                <div class="assessment-card-header">
+                  <div class="assessment-card-icon" style="color:#6366F1;">💻</div>
+                  <span class="assessment-card-badge">32 Skills</span>
+                </div>
+                <div>
+                  <div class="assessment-card-title">Technical Skills</div>
+                  <div class="assessment-card-topics">
+                    <span class="assessment-topic">DSA</span>
+                    <span class="assessment-topic">Programming</span>
+                    <span class="assessment-topic">System Design</span>
+                    <span class="assessment-topic">DBMS</span>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startAssessment('Technical')">Start Assessment</button>
+              </div>
+
+              <div class="assessment-card animate-fade-up" style="animation-delay:0.1s;">
+                <div class="assessment-card-header">
+                  <div class="assessment-card-icon" style="color:#3B82F6;">🗄️</div>
+                  <span class="assessment-card-badge">24 Skills</span>
+                </div>
+                <div>
+                  <div class="assessment-card-title">Database Systems</div>
+                  <div class="assessment-card-topics">
+                    <span class="assessment-topic">SQL</span>
+                    <span class="assessment-topic">NoSQL</span>
+                    <span class="assessment-topic">Indexing</span>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startAssessment('Database')">Start Assessment</button>
+              </div>
+
+              <div class="assessment-card animate-fade-up" style="animation-delay:0.2s;">
+                <div class="assessment-card-header">
+                  <div class="assessment-card-icon" style="color:#10B981;">☁️</div>
+                  <span class="assessment-card-badge">20 Skills</span>
+                </div>
+                <div>
+                  <div class="assessment-card-title">Cloud Computing</div>
+                  <div class="assessment-card-topics">
+                    <span class="assessment-topic">AWS</span>
+                    <span class="assessment-topic">Azure</span>
+                    <span class="assessment-topic">Docker</span>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startAssessment('Cloud')">Start Assessment</button>
+              </div>
+
+              <div class="assessment-card animate-fade-up" style="animation-delay:0.3s;">
+                <div class="assessment-card-header">
+                  <div class="assessment-card-icon" style="color:#F59E0B;">🤖</div>
+                  <span class="assessment-card-badge">15 Skills</span>
+                </div>
+                <div>
+                  <div class="assessment-card-title">Machine Learning</div>
+                  <div class="assessment-card-topics">
+                    <span class="assessment-topic">Regression</span>
+                    <span class="assessment-topic">Neural Nets</span>
+                    <span class="assessment-topic">NLP</span>
+                  </div>
+                </div>
+                <button class="btn btn-primary btn-sm" onclick="startAssessment('Machine Learning')">Start
+                  Assessment</button>
+              </div>
+            </div>
+
+
+            <!-- RECOMMENDED -->
+            <h3 class="section-title" style="margin:32px 0 20px;">Recommended For You</h3>
+            <div class="grid grid-2" style="gap:20px;">
+              <div class="card"
+                style="display:flex; flex-direction:column; gap:12px; border-left:4px solid var(--primary);">
+                <div style="font-size:15px; font-weight:800;">Improve DSA Skills</div>
+                <p style="font-size:12px; color:var(--text-muted);">Strengthen your problem solving and algorithms</p>
+                <button class="btn btn-primary btn-sm" style="align-self:flex-start;"
+                  onclick="startAssessment('Technical')">Start Practice</button>
+              </div>
+              <div class="card"
+                style="display:flex; flex-direction:column; gap:12px; border-left:4px solid var(--secondary);">
+                <div style="font-size:15px; font-weight:800;">Aptitude Booster</div>
+                <p style="font-size:12px; color:var(--text-muted);">Improve speed and accuracy in aptitude</p>
+                <button class="btn btn-primary btn-sm" style="align-self:flex-start; background:var(--secondary);"
+                  onclick="startAssessment('Aptitude')">Start
+                  Practice</button>
+              </div>
+              <div class="card"
+                style="display:flex; flex-direction:column; gap:12px; border-left:4px solid var(--success);">
+                <div style="font-size:15px; font-weight:800;">Communication Mastery</div>
+                <p style="font-size:12px; color:var(--text-muted);">Enhance your writing and speaking skills</p>
+                <button class="btn btn-primary btn-sm" style="align-self:flex-start; background:var(--success);"
+                  onclick="startAssessment('Communication')">Start
+                  Practice</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT SIDEBAR -->
+          <div class="analytics-right">
+            <div class="sidebar-widget">
+              <h4 class="widget-title">💡 Assessment Tips</h4>
+              <div class="tip-item"><span>✅</span> Choose a quiet place</div>
+              <div class="tip-item"><span>✅</span> Be honest in responses</div>
+              <div class="tip-item"><span>✅</span> Practice regularly</div>
+              <div class="tip-item"><span>✅</span> Review your results</div>
+            </div>
+
+            <div class="sidebar-widget">
+              <h4 class="widget-title">🕐 Recent Assessments</h4>
+              <div class="recent-test-item">
+                <div style="font-size:13px; font-weight:700;">DSA Assessment</div>
+                <span class="test-score-badge score-good">78% Good</span>
+              </div>
+              <div class="recent-test-item">
+                <div style="font-size:13px; font-weight:700;">Aptitude Test</div>
+                <span class="test-score-badge score-average">65% Avg</span>
+              </div>
+              <div class="recent-test-item">
+                <div style="font-size:13px; font-weight:700;">Communication</div>
+                <span class="test-score-badge score-good">70% Good</span>
+              </div>
+            </div>
+
+            <div class="sidebar-widget">
+              <h4 class="widget-title">📈 Overall Progress</h4>
+              <canvas id="progressChart" height="150"></canvas>
+            </div>
+
+            <div class="sidebar-widget ai-mentor-card">
+              <div class="mentor-img">🤖</div>
+              <div style="font-size:15px; font-weight:800; margin-bottom:8px;">AI Mentor</div>
+              <p style="font-size:12px; color:var(--text-secondary); margin-bottom:16px;">Our AI mentor is here to help
+                you improve your skills based on your performance.</p>
+              <button class="btn btn-primary btn-sm" style="width:100%;" onclick="startAIChat()">Chat with AI
+                Mentor</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ASSESSMENT MODAL -->
+  <div id="assessmentModal"
+    style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); backdrop-filter:blur(5px); z-index:2000; align-items:center; justify-content:center;">
+    <div class="card"
+      style="width:100%; max-width:600px; padding:32px; position:relative; max-height: 90vh; display: flex; flex-direction: column;">
+      <button onclick="closeModal()"
+        style="position:absolute; top:20px; right:20px; background:none; border:none; font-size:20px; cursor:pointer; z-index: 10;">✕</button>
+      <h2 id="modalTitle" class="section-title">Technical Assessment</h2>
+      <p id="modalDesc" style="color:var(--text-muted); margin-bottom:24px;">Please answer the following questions to
+        evaluate your competency.</p>
+
+      <div id="testArea" style="overflow-y: auto; flex: 1; padding-right: 10px;">
+        <div id="questionContainer" style="margin-bottom:24px;">
+          <!-- Questions will be injected here -->
+        </div>
+        <button class="btn btn-primary" style="width:100%; margin-bottom: 10px;" onclick="finishTest()">Submit
+          Answers</button>
+      </div>
+
+      <div id="loadingArea" style="display:none; text-align:center; padding:40px 0;">
+        <div class="ai-pulse" style="margin-bottom:20px;"><span class="ai-pulse-dot"
+            style="width:15px; height:15px;"></span> System Evaluating...</div>
+        <p style="font-size:14px; color:var(--text-muted);">Calculating your skill competency score...</p>
+      </div>
+
+      <div id="resultArea" style="display:none; text-align:center; padding:10px 0;">
+        <div style="font-size:48px; margin-bottom:10px;">🏆</div>
+        <h3 id="scoreText" style="font-size:24px; margin-bottom:4px;">88% Score!</h3>
+        <p id="scoreSubtext" style="color:var(--text-muted); font-size: 14px; margin-bottom:20px;">Assessment analyzed
+          by Placement Engine</p>
+
+        <div class="ai-analysis-box"
+          style="background:var(--bg); border:1px solid var(--border-light); border-radius:16px; padding:20px; text-align:left; margin-bottom:24px;">
+          <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+            <span style="font-size:18px;">🧠</span>
+            <span style="font-weight:800; font-size:14px; color:var(--text-primary);">Skill Analysis</span>
+          </div>
+          <div id="analysisDetails" style="font-size:13px; color:var(--text-secondary); line-height:1.6;">
+            <!-- Analysis details injected here -->
+          </div>
+          <div
+            style="margin-top:16px; padding-top:12px; border-top:1px dashed var(--border-light); display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-size:12px; font-weight:700; color:var(--primary);">Recommended Path:</span>
+            <span id="recommendedPath" style="font-size:12px; color:var(--text-muted);">Self-Paced Learning</span>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:12px;">
+          <button class="btn btn-primary" style="flex:1;" onclick="closeModal()">Dashboard</button>
+          <button class="btn btn-outline" style="flex:1;" onclick="location.reload()">Retry Test</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      // Theme initialization
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+
+      // Session handling
+      const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+      if (!session.isLoggedIn) {
+        window.location.href = 'login.html';
+      }
+    })();
+    const questionBank = {
+      "Technical": [
+        { q: "What is the time complexity of searching in a Hash Map (Average Case)?", options: ["O(1)", "O(n)", "O(log n)"], correct: 0 },
+        { q: "Which data structure follows LIFO?", options: ["Queue", "Stack", "Linked List"], correct: 1 },
+        { q: "What is the time complexity of QuickSort (Average Case)?", options: ["O(n^2)", "O(n log n)", "O(n)"], correct: 1 },
+        { q: "Which algorithm is used to find the shortest path in a weighted graph?", options: ["DFS", "BFS", "Dijkstra"], correct: 2 },
+        { q: "What is a 'Pure Function' in programming?", options: ["A function with no arguments", "A function with no side effects", "A function that returns a boolean"], correct: 1 },
+        { q: "What does SOLID stand for in design patterns?", options: ["Standard Objects", "Single Responsibility, Open/Closed...", "Simple Organized Logic"], correct: 1 },
+        { q: "In a Binary Search Tree, what is the complexity of insertion?", options: ["O(1)", "O(log n)", "O(n)"], correct: 1 },
+        { q: "Which of these is NOT a primitive data type in JS?", options: ["String", "Object", "Number"], correct: 1 },
+        { q: "What is 'Hoisting' in JavaScript?", options: ["Moving declarations to top", "Lifting weights", "A type of loop"], correct: 0 },
+        { q: "What is the primary purpose of a 'Mutex'?", options: ["Thread Synchronization", "Memory Management", "Speeding up CPU"], correct: 0 },
+        { q: "Which sorting algorithm is stable?", options: ["QuickSort", "MergeSort", "HeapSort"], correct: 1 },
+        { q: "What is 'Deadlock' in OS?", options: ["Computer Crash", "Circular Wait of Resources", "Memory Leak"], correct: 1 },
+        { q: "What is the use of 'Virtual Memory'?", options: ["Extra RAM", "Abstraction of physical memory", "Speeding up disk"], correct: 1 },
+        { q: "In TCP/IP, which layer is responsible for routing?", options: ["Transport", "Network", "Application"], correct: 1 },
+        { q: "What is 'Sharding' in System Design?", options: ["Vertical Scaling", "Horizontal Partitioning of Data", "Load Balancing"], correct: 1 }
+      ],
+      "Database": [
+        { q: "What does ACID stand for in DBMS?", options: ["Atomicity, Consistency...", "Action, Core...", "Access, Control..."], correct: 0 },
+        { q: "Which SQL command is used to add data?", options: ["ADD", "UPDATE", "INSERT"], correct: 2 },
+        { q: "What is a 'Primary Key'?", options: ["A unique identifier", "The first column", "A password"], correct: 0 },
+        { q: "Which join returns all records from the left table?", options: ["Inner Join", "Left Join", "Full Join"], correct: 1 },
+        { q: "What is 'Normalization'?", options: ["Increasing redundancy", "Reducing redundancy", "Deleting data"], correct: 1 },
+        { q: "Which of these is a NoSQL database?", options: ["PostgreSQL", "MongoDB", "Oracle"], correct: 1 },
+        { q: "What is the purpose of an 'Index'?", options: ["Slow down writes", "Speed up reads", "Store backups"], correct: 1 },
+        { q: "What is a 'Foreign Key'?", options: ["A key from another country", "A link between tables", "A hidden key"], correct: 1 },
+        { q: "What is 'Denormalization' used for?", options: ["Improving data integrity", "Improving read performance", "Reducing storage"], correct: 1 },
+        { q: "Which SQL statement is used to remove data?", options: ["REMOVE", "DELETE", "DROP"], correct: 1 },
+        { q: "What is the difference between DELETE and TRUNCATE?", options: ["None", "TRUNCATE is faster and can't be rolled back", "DELETE removes the table"], correct: 1 },
+        { q: "What is a 'Stored Procedure'?", options: ["A backup", "Precompiled SQL code", "A type of table"], correct: 1 },
+        { q: "What is 'Database Sharding'?", options: ["Mirroring", "Partitioning data across servers", "Indexing"], correct: 1 },
+        { q: "Which level of normalization removes partial dependencies?", options: ["1NF", "2NF", "3NF"], correct: 1 },
+        { q: "What is 'CAP Theorem' in Distributed Systems?", options: ["Consistency, Availability, Partition Tolerance", "Control, Access, Power", "Core, Apps, Plugins"], correct: 0 }
+      ],
+      "Cloud": [
+        { q: "Which AWS service provides resizable compute capacity?", options: ["EC2", "S3", "Lambda"], correct: 0 },
+        { q: "What is the main purpose of Docker?", options: ["Storage", "Containerization", "Networking"], correct: 1 },
+        { q: "Which cloud model is shared by multiple organizations?", options: ["Private", "Public", "Hybrid"], correct: 1 },
+        { q: "In Azure, what groups resources logically?", options: ["VMs", "Resource Groups", "Subscriptions"], correct: 1 },
+        { q: "What is the orchestration tool for containers?", options: ["Docker", "Kubernetes", "Jenkins"], correct: 1 },
+        { q: "What does S3 stand for?", options: ["Simple Storage Service", "Secure Storage System", "Simple Super Storage"], correct: 0 },
+        { q: "Which service is 'Serverless'?", options: ["RDS", "EC2", "Lambda"], correct: 2 },
+        { q: "What is a VPC?", options: ["Virtual Private Cloud", "Verified Private Connection", "Virtual Power Center"], correct: 0 },
+        { q: "Default port for SSH?", options: ["80", "443", "22"], correct: 2 },
+        { q: "What is IAM?", options: ["Internal Access Map", "Identity and Access Management", "Intelligent Asset Manager"], correct: 1 },
+        { q: "AWS service for CDN?", options: ["CloudFront", "CloudTrail", "CloudWatch"], correct: 0 },
+        { q: "Database service in AWS?", options: ["S3", "RDS", "VPC"], correct: 1 },
+        { q: "Concept of scaling resources up/down?", options: ["Elasticity", "Availability", "Durability"], correct: 0 },
+        { q: "What is a 'Region' in AWS?", options: ["A Data Center", "Geographic Area", "A single Server"], correct: 1 },
+        { q: "CLI tool for Kubernetes?", options: ["kubeadm", "kubectl", "kubeserve"], correct: 1 }
+      ],
+      "Machine Learning": [
+        { q: "What is 'Overfitting'?", options: ["Model is too simple", "Model fits noise instead of pattern", "Model is too fast"], correct: 1 },
+        { q: "Which algorithm is used for Classification?", options: ["Linear Regression", "Logistic Regression", "K-Means"], correct: 1 },
+        { q: "What is a 'Neural Network' inspired by?", options: ["Solar System", "Human Brain", "Computer Networks"], correct: 1 },
+        { q: "What does 'NLP' stand for?", options: ["Natural Learning Process", "Natural Language Processing", "Node Language Protocol"], correct: 1 },
+        { q: "What is 'Supervised Learning'?", options: ["Learning with labeled data", "Learning with unlabeled data", "Learning by trial and error"], correct: 0 },
+        { q: "What is the purpose of a 'Validation Set'?", options: ["Training the model", "Tuning hyperparameters", "Final testing"], correct: 1 },
+        { q: "Which metric is used for Regression models?", options: ["Accuracy", "Mean Squared Error", "F1 Score"], correct: 1 },
+        { q: "What is 'Reinforcement Learning'?", options: ["Learning from mistakes", "Learning via rewards/punishments", "Learning from labels"], correct: 1 },
+        { q: "What is 'Gradient Descent'?", options: ["An optimization algorithm", "A type of loss function", "A data structure"], correct: 0 },
+        { q: "What is 'Data Augmentation'?", options: ["Increasing data quality", "Artificially increasing data volume", "Deleting outliers"], correct: 1 },
+        { q: "What is 'Cross-Validation'?", options: ["A way to test models on multiple folds", "A type of layer", "A bias"], correct: 0 },
+        { q: "Which activation function is most common in hidden layers?", options: ["Sigmoid", "ReLU", "Softmax"], correct: 1 },
+        { q: "What is a 'Random Forest'?", options: ["A single tree", "Ensemble of Decision Trees", "A type of cluster"], correct: 1 },
+        { q: "What does 'Bias' represent in ML?", options: ["Random error", "Systematic error", "Model speed"], correct: 1 },
+        { q: "What is 'Clustering'?", options: ["Unsupervised grouping", "Supervised classification", "Sorting"], correct: 0 }
+      ],
+      "Communication": [
+        { q: "What is 'Active Listening'?", options: ["Listening while doing other tasks", "Fully concentrating on what is being said", "Waiting for your turn to speak"], correct: 1 },
+        { q: "Which of these is a form of non-verbal communication?", options: ["Body Language", "Email", "Phone Call"], correct: 0 },
+        { q: "What is the '7 C's' of communication?", options: ["Clear, Concise, Concrete...", "Capture, Control, Care...", "Create, Connect, Correct..."], correct: 0 },
+        { q: "What is 'Empathy' in communication?", options: ["Feeling sorry for someone", "Understanding another person's perspective", "Agreeing with everything"], correct: 1 },
+        { q: "Which is most effective for formal requests?", options: ["Social Media", "Email", "Instant Messaging"], correct: 1 },
+        { q: "What is 'Paraphrasing'?", options: ["Copying word for word", "Expressing the same meaning in your own words", "Ignoring the main point"], correct: 1 },
+        { q: "How much of communication is estimated to be non-verbal?", options: ["10-20%", "Over 70%", "Exactly 50%"], correct: 1 },
+        { q: "What is 'Assertive' communication?", options: ["Being aggressive", "Expressing needs clearly and respectfully", "Being passive"], correct: 1 },
+        { q: "Which of these avoids 'Communication Barriers'?", options: ["Using Jargon", "Clarity and Simplicity", "Interrupting frequently"], correct: 1 },
+        { q: "What is the purpose of 'Feedback'?", options: ["To criticize", "To ensure the message was understood", "To end the conversation"], correct: 1 },
+        { q: "What is 'Eye Contact' used for?", options: ["Intimidating the speaker", "Showing engagement and interest", "Looking around the room"], correct: 1 },
+        { q: "In a presentation, what is 'Visual Aid'?", options: ["A bandage", "Slides/Charts used to support the talk", "A hearing aid"], correct: 1 },
+        { q: "What is 'Tone of Voice'?", options: ["The volume only", "The way words are spoken to convey emotion", "The speed of speaking"], correct: 1 },
+        { q: "What is 'Conciseness'?", options: ["Using complex words", "Using few words but conveying all info", "Talking for a long time"], correct: 1 },
+        { q: "Which is a 'Closed Question'?", options: ["How do you feel?", "Do you agree?", "Why did you do that?"], correct: 1 }
+      ]
+    };
+
+    let currentQuestions = [];
+
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+        datasets: [{
+          label: 'Skill Growth',
+          data: [45, 52, 60, 68, 72],
+          borderColor: '#9333EA',
+          tension: 0.4,
+          fill: true,
+          backgroundColor: 'rgba(147, 51, 234, 0.1)'
+        }]
+      },
+      options: {
+        plugins: { legend: { display: false } },
+        scales: { y: { display: false }, x: { grid: { display: false } } }
+      }
+    });
+
+    function startAssessment(title) {
+      document.getElementById('assessmentModal').style.display = 'flex';
+      document.getElementById('modalTitle').innerText = title + " Assessment";
+      document.getElementById('testArea').style.display = 'block';
+      document.getElementById('loadingArea').style.display = 'none';
+      document.getElementById('resultArea').style.display = 'none';
+
+      // Pick category from title
+      let category = "Technical";
+      if (title.includes("Cloud")) category = "Cloud";
+      else if (title.includes("Database")) category = "Database";
+      else if (title.includes("Machine Learning")) category = "Machine Learning";
+      else if (title.includes("Communication")) category = "Communication";
+
+      const bank = questionBank[category] || questionBank["Technical"];
+
+      // SHUFFLE and PICK 10
+      currentQuestions = bank
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 10);
+
+      renderQuestions();
+    }
+
+    function renderQuestions() {
+      const container = document.getElementById('questionContainer');
+      container.innerHTML = currentQuestions.map((q, i) => `
+        <div style="margin-bottom:24px; border-bottom:1px solid var(--border-light); padding-bottom:16px;">
+          <div style="font-weight:700; margin-bottom:12px; color:var(--text-primary);">${i + 1}. ${q.q}</div>
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            ${q.options.map((opt, oi) => `
+              <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-size:13px; background:var(--bg); padding:10px; border-radius:10px; border:1px solid var(--border-light); transition: all 0.2s;">
+                <input type="radio" name="q${i}" value="${oi}"> ${opt}
+              </label>
+            `).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      // Reset scroll to top
+      document.getElementById('testArea').scrollTop = 0;
+    }
+
+    function closeModal() {
+      document.getElementById('assessmentModal').style.display = 'none';
+    }
+
+    function finishTest() {
+      let correctCount = 0;
+      let answeredCount = 0;
+      currentQuestions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected) {
+          answeredCount++;
+          if (parseInt(selected.value) === q.correct) {
+            correctCount++;
+          }
+        }
+      });
+
+      if (answeredCount < currentQuestions.length) {
+        if (!confirm("You haven't answered all questions. Submit anyway?")) return;
+      }
+
+      const score = Math.round((correctCount / currentQuestions.length) * 100);
+      document.getElementById('testArea').style.display = 'none';
+      document.getElementById('loadingArea').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('loadingArea').style.display = 'none';
+        document.getElementById('resultArea').style.display = 'block';
+        document.getElementById('scoreText').innerText = score + "% Score!";
+
+        let analysis = "";
+        let path = "";
+
+        if (score >= 80) {
+          analysis = "Your performance is <b>exceptional</b>. You demonstrate a deep understanding of core concepts and their applications. Your problem-solving speed is well above the industry average.";
+          path = "Advanced Specialization";
+        } else if (score >= 60) {
+          analysis = "You have a <b>solid foundation</b>. While you understand the main concepts, there's room for improvement in edge-case scenarios and optimization techniques.";
+          path = "Skill Refinement";
+        } else {
+          analysis = "Your results suggest a need to <b>strengthen fundamentals</b>. We recommend revisiting core principles and practicing with foundational exercises before attempting advanced topics.";
+          path = "Foundational Bootcamp";
+        }
+
+        document.getElementById('analysisDetails').innerHTML = analysis;
+        document.getElementById('recommendedPath').innerText = path;
+
+        // Update Page Stats dynamically
+        updateMasteryStats(score, title);
+      }, 2000);
+    }
+
+    function updateMasteryStats(score, category) {
+      // Update circular score (weighted average)
+      const currentVal = parseInt(document.querySelector('.circular-score-val').innerText);
+      const newVal = Math.round((currentVal + score) / 2);
+      document.querySelector('.circular-score-val').innerText = newVal + '%';
+
+      // Update relevant progress bar
+      let barLabel = "Programming";
+      if (category.includes("Cloud")) barLabel = "Cloud Ops";
+      else if (category.includes("Database")) barLabel = "Databases";
+      else if (category.includes("Machine Learning")) barLabel = "System Design";
+
+      document.querySelectorAll('.progress-bar-item').forEach(item => {
+        if (item.querySelector('span').innerText === barLabel) {
+          item.querySelector('.progress-bar-fill').style.width = score + '%';
+          item.querySelectorAll('span')[1].innerText = score + '%';
+        }
+      });
+    }
+
+    // SESSION INITIALIZATION
+    (function initUserSession() {
+      const session = JSON.parse(localStorage.getItem('placePredictSession'));
+      if (!session || !session.isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+      }
+
+      const navName = document.getElementById('navName');
+      const navAvatar = document.getElementById('navAvatar');
+
+      if (navName) navName.textContent = session.name;
+      if (navAvatar) {
+        if (session.picture) {
+          navAvatar.innerHTML = `<img src="${session.picture}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+        } else {
+          navAvatar.textContent = session.name.charAt(0).toUpperCase();
+        }
+      }
+    })();
+    function startAIChat() {
+      const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+      const name = session.name || "Student";
+      const message = prompt(`AI Mentor: Hello ${name}! I've analyzed your skill profile. What would you like to discuss today?\n\n1. Career Roadmap\n2. Interview Tips\n3. Skill Gap Analysis`);
+
+      if (message) {
+        alert("AI Mentor: That's a great choice! Based on your profile, I'm generating a personalized guidance report for you. It will be available in your Dashboard shortly.");
+      }
+    }
+  </script>
+</body>
+
+</html>

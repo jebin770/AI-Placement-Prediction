@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlacePredict – Settings</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="glow-bg"></div>
+<div class="glow-bg2"></div>
+<div class="app-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+    <div class="logo-text">Place <span>Predict</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></a>
+    <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict Placement</span></a>
+    <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student Comparison</span></a>
+    <div class="nav-section-label">Opportunities</div>
+    <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span class="nav-label">Companies</span></a>
+    <a href="#" class="nav-item"><span class="nav-icon">💼</span><span class="nav-label">Job Opportunities</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement Reports</span></a>
+    <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction History</span></a>
+    <a href="settings.html" class="nav-item active"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+  </nav>
+  <div class="sidebar-premium">
+    <div class="premium-title">⚡ Upgrade to Pro</div>
+    <div class="premium-desc">Unlock AI career guidance & unlimited predictions.</div>
+    <button class="premium-btn">Upgrade Now →</button>
+  </div>
+</aside>
+
+<div class="main-content">
+  <nav class="navbar">
+    <div class="navbar-title">⚙️ <span>Settings</span></div>
+    <div class="navbar-actions">
+      <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+      <div class="user-avatar" onclick="window.location.href='settings.html'">J</div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="page-header">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:8px;">
+        <div class="icon-btn" style="width:32px; height:32px;" onclick="window.history.back()">←</div>
+        <h1 class="page-title" style="margin-bottom:0;">Settings</h1>
+      </div>
+      <p class="page-subtitle">Manage your account, preferences and app settings</p>
+    </div>
+
+    <div class="settings-container animate-fade-up">
+      <!-- LEFT SIDE: SETTINGS PANEL -->
+      <div class="settings-sidebar">
+        
+
+        <!-- PROFILE CARD -->
+        <div class="settings-profile-card">
+          <div class="settings-profile-avatar">J</div>
+          <div class="settings-profile-info">
+            <div class="settings-profile-name">Jebin Justin</div>
+            <div class="settings-profile-email">jebin@example.com</div>
+          </div>
+          <button class="btn btn-primary btn-sm">Pro Plan</button>
+        </div>
+
+        <!-- ACCOUNT SECTION -->
+        <div class="settings-section-header">Account</div>
+        <div class="settings-item" onclick="alert('Opening Profile Settings...')">
+          <div class="settings-item-icon" style="color:var(--primary);">👤</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Profile Information</div>
+            <div class="settings-item-subtitle">Edit photo, name, bio and details</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="alert('Opening Password Settings...')">
+          <div class="settings-item-icon" style="color:var(--secondary);">🔒</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Change Password</div>
+            <div class="settings-item-subtitle">Update password and 2FA settings</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="alert('Opening Email & Phone Settings...')">
+          <div class="settings-item-icon" style="color:var(--accent-cyan);">📧</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Email & Phone</div>
+            <div class="settings-item-subtitle">Verify and manage contact methods</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+
+        <!-- PREFERENCES SECTION -->
+        <div class="settings-section-header">Preferences</div>
+        <div class="settings-item">
+          <div class="settings-item-icon" style="color:var(--warning);">🔔</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Notifications</div>
+            <div class="settings-item-subtitle">Push, email and result alerts</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" checked>
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon" style="color:var(--primary-light);">🌗</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Appearance</div>
+            <div class="settings-item-subtitle">Switch between light, dark and system</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon" style="color:var(--success);">🌐</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Language</div>
+            <div class="settings-item-subtitle">Current: English (Default)</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+
+        <!-- PRIVACY SECTION -->
+        <div class="settings-section-header">Privacy & Security</div>
+        <div class="settings-item" onclick="alert('Managing Privacy Settings...')">
+          <div class="settings-item-icon" style="color:var(--danger);">🛡️</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Privacy</div>
+            <div class="settings-item-subtitle">Visibility and data sharing controls</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="alert('Managing Security Settings...')">
+          <div class="settings-item-icon" style="color:var(--primary);">🛡️</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Security</div>
+            <div class="settings-item-subtitle">Active sessions and device logs</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item" onclick="alert('Managing Blocked Users...')">
+          <div class="settings-item-icon" style="color:var(--text-muted);">🚫</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Blocked Users</div>
+            <div class="settings-item-subtitle">Manage users you've restricted</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+
+        <!-- AI CONTROL CENTER -->
+        <div class="settings-section-header">AI Control Center</div>
+        <div class="settings-item">
+          <div class="settings-item-icon" style="color:var(--primary);">🤖</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">AI Access</div>
+            <div class="settings-item-subtitle">Allow AI to analyze your placement data</div>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="aiToggle" checked onchange="alert('AI Access ' + (this.checked ? 'Enabled' : 'Disabled'))">
+            <span class="slider"></span>
+          </label>
+        </div>
+        <div class="settings-item" onclick="alert('Configuring AI Personality...')">
+          <div class="settings-item-icon" style="color:var(--secondary);">🧠</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">AI Personality</div>
+            <div class="settings-item-subtitle">Current: Professional (Formal)</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+
+        <!-- MORE SECTION -->
+        <div class="settings-section-header">More</div>
+        <div class="settings-item">
+          <div class="settings-item-icon">❓</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Help & Support</div>
+            <div class="settings-item-subtitle">FAQs, contact us and live chat</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon">⭐</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">Rate Us</div>
+            <div class="settings-item-subtitle">We value your feedback</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+        <div class="settings-item">
+          <div class="settings-item-icon">ℹ️</div>
+          <div class="settings-item-info">
+            <div class="settings-item-title">About</div>
+            <div class="settings-item-subtitle">Version 2.4.0 • Terms & Privacy</div>
+          </div>
+          <div class="settings-item-arrow">›</div>
+        </div>
+
+        <!-- LOGOUT -->
+        <div class="logout-btn-card" onclick="confirmLogout()">
+          <span>🚪</span> Logout Account
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE: EXPLANATION PANEL -->
+      <div class="explanation-panel">
+        <h2 class="explanation-title">📝 Profile & Placement</h2>
+        
+        <div class="card" style="margin-bottom:24px; background:rgba(108,76,241,0.05);">
+          <div style="font-size:14px; font-weight:700; color:var(--primary); margin-bottom:12px;">🏆 Placement Success</div>
+          <div class="form-group">
+            <label class="form-label">Currently Placed In:</label>
+            <input type="text" class="form-input" id="placedCompany" placeholder="e.g. Google, TCS, etc." value="Not Placed yet"/>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="savePlacement()">Save Status</button>
+        </div>
+
+
+        <div class="card" style="margin-top:24px; background:var(--gradient-soft); border-color:var(--primary);">
+          <div style="font-size:13px; font-weight:700; color:var(--primary); margin-bottom:8px;">💡 Pro Tip</div>
+          <p style="font-size:12px; color:var(--text-secondary); line-height:1.6;">
+            Enable <strong>Two-Factor Authentication</strong> to keep your academic and placement data secure from unauthorized access.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+function confirmLogout() {
+  if(confirm("Are you sure you want to logout?")) {
+    window.location.href = 'login.html';
+  }
+}
+function savePlacement() {
+  const company = document.getElementById('placedCompany').value;
+  alert("Placement status updated to: " + company);
+}
+document.querySelectorAll('.settings-item').forEach(item => {
+  item.onclick = () => {
+    const title = item.querySelector('.settings-item-title').innerText;
+    alert("Opening " + title + " settings...");
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PlacePredict | Register</title>
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #7B2FF7;
+      --secondary: #5F6DFC;
+      --dark: #0F172A;
+      --gray: #64748B;
+      --light: #F8FAFC;
+      --white: #FFFFFF;
+      --gradient: linear-gradient(135deg, #7B2FF7 0%, #5F6DFC 100%);
+      --shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+    body { background: #F8FAFC; color: var(--dark); min-height: 100vh; overflow-x: hidden; }
+
+    .split-container { display: flex; min-height: 100vh; width: 100%; }
+
+    .branding-side {
+      flex: 1;
+      padding: 60px;
+      background: radial-gradient(circle at top left, rgba(123, 47, 247, 0.05), transparent),
+                  radial-gradient(circle at bottom right, rgba(95, 109, 252, 0.05), transparent);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      position: relative;
+    }
+
+    .brand-logo {
+      position: absolute;
+      top: 60px;
+      left: 60px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 26px;
+      font-weight: 800;
+    }
+
+    .logo-p {
+      width: 44px;
+      height: 44px;
+      background: var(--gradient);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      box-shadow: 0 8px 16px rgba(123, 47, 247, 0.2);
+    }
+
+    .logo-text span {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .content-wrap { max-width: 520px; }
+    .hero-title { font-size: 42px; font-weight: 800; line-height: 1.2; margin-bottom: 20px; }
+    .hero-title em { font-style: normal; color: var(--primary); }
+    .hero-desc { font-size: 17px; color: var(--gray); margin-bottom: 40px; }
+
+    .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .feature-box { display: flex; align-items: center; gap: 14px; background: white; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    .feature-box span { font-size: 24px; }
+    .feature-box p { font-size: 14px; font-weight: 600; color: var(--dark); }
+
+    .register-side {
+      flex: 0.8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px;
+      background: white;
+    }
+
+    .register-wrapper { width: 100%; max-width: 440px; }
+    .register-header { text-align: center; margin-bottom: 32px; }
+    .register-header h1 { font-size: 32px; font-weight: 800; margin-bottom: 8px; }
+    .register-header p { color: var(--gray); font-size: 15px; }
+
+    .custom-google-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 100%;
+      padding: 14px 24px;
+      background: white;
+      border: 1px solid #E2E8F0;
+      border-radius: 50px;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--dark);
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      margin-bottom: 24px;
+    }
+
+    .custom-google-btn:hover {
+      background: #F8FAFC;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+    }
+
+    .divider {
+      text-align: center;
+      position: relative;
+      margin-bottom: 24px;
+    }
+
+    .divider::before {
+      content: ""; position: absolute; top: 50%; left: 0; width: 100%; height: 1px; background: #EDF2F7;
+    }
+
+    .divider span {
+      position: relative; background: white; padding: 0 16px; font-size: 13px; color: var(--gray); z-index: 2;
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 700; margin-bottom: 8px; color: var(--dark); }
+    .field {
+      width: 100%; padding: 14px 18px; background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px;
+      font-size: 15px; transition: 0.2s;
+    }
+    .field:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 4px rgba(123, 47, 247, 0.08); }
+
+    .btn-submit {
+      width: 100%; padding: 16px; background: var(--gradient); color: white; border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 700; cursor: pointer; box-shadow: 0 8px 16px rgba(123, 47, 247, 0.15);
+      transition: 0.2s;
+    }
+    .btn-submit:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(123, 47, 247, 0.25); }
+
+    .login-link { text-align: center; margin-top: 32px; font-size: 14px; color: var(--gray); }
+    .login-link a { color: var(--primary); font-weight: 700; text-decoration: none; }
+
+    @media (max-width: 1024px) {
+      .branding-side { display: none; }
+      .register-side { flex: 1; background: #F8FAFC; }
+      .register-wrapper { background: white; padding: 40px; border-radius: 24px; box-shadow: var(--shadow); }
+    }
+  </style>
+</head>
+<body>
+
+  <script>
+    localStorage.removeItem('placePredictSession');
+    localStorage.removeItem('placePredictUser');
+  </script>
+
+  <div class="split-container">
+    <section class="branding-side">
+      <div class="brand-logo">
+        <div class="logo-p">P</div>
+        <div class="logo-text">Place<span>Predict</span></div>
+      </div>
+      <div class="content-wrap">
+        <h1 class="hero-title">Predict. Prepare.<br>Get <em>Placed.</em></h1>
+        <p class="hero-desc">Start your journey today with our AI-powered placement engine.</p>
+        <div class="feature-grid">
+          <div class="feature-box"><span>🔮</span><p>Prediction</p></div>
+          <div class="feature-box"><span>⚖️</span><p>Comparison</p></div>
+          <div class="feature-box"><span>🧩</span><p>Assessment</p></div>
+          <div class="feature-box"><span>📊</span><p>Analytics</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="register-side">
+      <div class="register-wrapper">
+        <div class="register-header">
+          <h1>Create Account</h1>
+          <p>Join thousands of students on their journey</p>
+        </div>
+
+
+        <form id="regForm" autocomplete="off">
+          <div class="form-group">
+            <label>Full Name</label>
+            <input type="text" id="regName" class="field" placeholder="Enter your full name" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Email Address</label>
+            <input type="email" id="regEmail" class="field" placeholder="Enter your email" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <input type="password" id="regPass" class="field" placeholder="Create password" required autocomplete="new-password">
+          </div>
+          <button type="submit" class="btn-submit">Create Account →</button>
+        </form>
+
+        <div class="login-link">
+          Already have an account? <a href="login.html">Sign in here</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Manual Form Submission
+    document.getElementById('regForm').onsubmit = (e) => {
+        e.preventDefault();
+        const name = document.getElementById('regName').value;
+        const email = document.getElementById('regEmail').value;
+        const sessionUser = {
+          email: email,
+          name: name,
+          isLoggedIn: true
+        };
+        localStorage.setItem('placePredictSession', JSON.stringify(sessionUser));
+        window.location.href = 'login.html';
+    };
+
+    localStorage.setItem('theme', 'light');
+    document.documentElement.setAttribute('data-theme', 'light');
+  </script>
+</body>
+</html>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Placement – Companies & Placement</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    .companies-hero {
+      background: #1e293b;
+      border-radius: var(--radius-lg);
+      padding: 40px;
+      color: #fff;
+      text-align: center;
+      margin-bottom: 32px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .companies-hero::before {
+      content: '🏢';
+      position: absolute;
+      font-size: 200px;
+      opacity: 0.1;
+      right: -40px;
+      top: -40px;
+    }
+
+    .success-banner {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid var(--success);
+      color: var(--success);
+      padding: 16px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 24px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+    }
+
+    .company-grid-large {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .company-item-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .company-item-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .company-logo-lg {
+      width: 60px;
+      height: 60px;
+      border-radius: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      background: #fff;
+      border: 1px solid var(--border-light);
+      overflow: hidden;
+    }
+
+    .company-logo-lg img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      padding: 5px;
+    }
+
+    .company-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+
+    .company-meta {
+      display: flex;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .company-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .selected-highlight {
+      border: 3px solid var(--primary) !important;
+      box-shadow: 0 0 30px rgba(108, 76, 241, 0.3) !important;
+      transform: scale(1.05);
+    }
+
+    .selection-badge {
+      background: var(--primary);
+      color: white;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      display: inline-block;
+      margin-bottom: 10px;
+    }
+
+    .btn-select {
+      width: 100%;
+      padding: 12px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      margin-top: 10px;
+      box-shadow: 0 4px 15px rgba(108, 76, 241, 0.2);
+    }
+
+    .btn-select:hover {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(108, 76, 241, 0.3);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow-bg"></div>
+  <div class="glow-bg2"></div>
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="logo-text">Place <span>Predict</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span
+            class="nav-label">Dashboard</span></a>
+        <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict
+            Placement</span></a>
+        <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student
+            Comparison</span></a>
+        <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction
+            History</span></a>
+        <div class="nav-section-label">Assessment</div>
+        <a href="assessment.html" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill
+            Assessment</span></a>
+        <div class="nav-section-label">Opportunities</div>
+        <a href="companies.html" class="nav-item active"><span class="nav-icon">🏢</span><span
+            class="nav-label">Companies</span></a>
+        <div class="nav-section-label">Reports</div>
+        <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement
+            Reports</span></a>
+        <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span
+            class="nav-label">Settings</span></a>
+      </nav>
+    </aside>
+
+    <div class="main-content">
+      <nav class="navbar">
+        <div class="navbar-title">Explore <span>Companies</span></div>
+        <div class="navbar-actions">
+          <div class="icon-btn" onclick="location.reload()">🔄</div>
+          <div class="user-avatar" id="navAvatar">U</div>
+        </div>
+      </nav>
+
+      <div class="page-content">
+        <div id="predictionSuccess" class="success-banner">
+          <span style="font-size:24px;">🎯</span>
+          <div id="successText">Congratulations! Based on your recent prediction, you are a high-match for several top
+            companies.</div>
+        </div>
+
+
+        <div class="company-grid-large" id="companyGrid">
+          <!-- Companies will be filtered and marked by JS -->
+          <div class="company-item-card" id="card-Google" data-tier="90">
+            <div class="company-logo-lg">
+              <img src="assets/google.png" alt="Google Logo">
+            </div>
+            <div class="company-title">Google</div>
+            <div class="company-meta"><span>📍 Hyderabad</span><span>💰 32 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Leading the world
+              in search and AI innovation.</p>
+            <div class="company-status-badge" id="status-Google"></div>
+          </div>
+
+          <div class="company-item-card" id="card-Meta" data-tier="90">
+            <div class="company-logo-lg">
+              <img src="assets/meta.png" alt="Meta Logo">
+            </div>
+            <div class="company-title">Meta</div>
+            <div class="company-meta"><span>📍 Remote</span><span>💰 45 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Building the future
+              of social connection.</p>
+            <div class="company-status-badge" id="status-Meta"></div>
+          </div>
+
+          <div class="company-item-card" id="card-Microsoft" data-tier="90">
+            <div class="company-logo-lg">
+              <img src="assets/microsoft.png" alt="Microsoft Logo">
+            </div>
+            <div class="company-title">Microsoft</div>
+            <div class="company-meta"><span>📍 Bangalore</span><span>💰 28 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Empowering every
+              person to achieve more.</p>
+            <div class="company-status-badge" id="status-Microsoft"></div>
+          </div>
+
+          <div class="company-item-card" id="card-Amazon" data-tier="70">
+            <div class="company-logo-lg">
+              <img src="assets/amazon.png" alt="Amazon Logo">
+            </div>
+            <div class="company-title">Amazon</div>
+            <div class="company-meta"><span>📍 Bangalore</span><span>💰 24 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Earth's most
+              customer-centric company.</p>
+            <div class="company-status-badge" id="status-Amazon"></div>
+          </div>
+
+          <div class="company-item-card" id="card-TCS" data-tier="60">
+            <div class="company-logo-lg">
+              <img src="assets/tcs.png" alt="TCS Logo">
+            </div>
+            <div class="company-title">Tata Consultancy Services</div>
+            <div class="company-meta"><span>📍 Pan India</span><span>💰 7 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Leading IT services
+              and consulting.</p>
+            <div class="company-status-badge" id="status-TCS"></div>
+          </div>
+
+          <div class="company-item-card" id="card-Infosys" data-tier="60">
+            <div class="company-logo-lg">
+              <img src="assets/infosys.png" alt="Infosys Logo">
+            </div>
+            <div class="company-title">Infosys</div>
+            <div class="company-meta"><span>📍 Bangalore</span><span>💰 6.5 LPA</span></div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.5; margin-bottom:12px;">Global leader in
+              digital services.</p>
+            <div class="company-status-badge" id="status-Infosys"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    window.onload = function () {
+      // Theme initialization
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+
+      // Session handling
+      const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+      if (!session.isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+      }
+      const navAvatar = document.getElementById('navAvatar');
+      if (navAvatar) navAvatar.textContent = (session.name || 'U').charAt(0).toUpperCase();
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const score = parseFloat(urlParams.get('score')) || 0;
+      const selectedCompany = urlParams.get('selectedCompany');
+      const studentName = urlParams.get('student') || session.name || 'Student';
+      const history = JSON.parse(localStorage.getItem('placementHistory') || '[]');
+      
+      const banner = document.getElementById('predictionSuccess');
+      const text = document.getElementById('successText');
+
+      banner.style.display = 'flex';
+
+      // 60% ABSOLUTE MINIMUM
+      if (score < 60) {
+        banner.style.background = 'rgba(239,68,68,0.1)';
+        banner.style.borderColor = 'var(--danger)';
+        banner.style.color = 'var(--danger)';
+        text.innerHTML = `<strong>NOT SELECTED:</strong> Your score is <strong>${score}%</strong>. A minimum of 60% is required for any placement.`;
+
+        document.querySelectorAll('.company-item-card').forEach(card => {
+          card.style.display = 'none';
+        });
+        return;
+      }
+
+      // UPDATED AUTOMATIC SELECTION LOGIC
+      let eligibleList = [];
+      let tierLabel = "Service Tier";
+      if (score >= 90) {
+        eligibleList = ["Google", "Meta", "Microsoft", "Amazon"];
+        tierLabel = "Top Tech / FAANG Tier";
+      } else if (score >= 80) {
+        eligibleList = ["Amazon", "Microsoft", "TCS", "Infosys"];
+        tierLabel = "Elite Product Tier";
+      } else if (score >= 70) {
+        eligibleList = ["TCS", "Infosys"];
+        tierLabel = "Growth Product Tier";
+      } else {
+        eligibleList = ["TCS", "Infosys"];
+      }
+
+      text.innerHTML = `<strong>🎉 YOU ARE ELIGIBLE!</strong> Based on your prediction of <strong>${score}%</strong>, you are matched with <strong>${tierLabel}</strong> companies.`;
+
+      document.querySelectorAll('.company-item-card').forEach(card => {
+        const badge = card.querySelector('.company-status-badge');
+        const companyName = card.querySelector('.company-title').innerText;
+        const lpa = card.querySelector('.company-meta span:last-child').innerText.replace('💰 ', '').replace(' LPA', '');
+
+        // HIGHLIGHT ELIGIBLE COMPANIES BASED ON SCORE
+        const isAutoEligible = eligibleList.some(name => name.toLowerCase() === companyName.toLowerCase());
+        const isExplicitlySelected = selectedCompany && companyName.toLowerCase() === selectedCompany.toLowerCase();
+
+        if (isAutoEligible || isExplicitlySelected) {
+          card.classList.add('selected-highlight');
+          const badgeEl = document.createElement('div');
+          badgeEl.className = 'selection-badge';
+          
+          if (isExplicitlySelected) {
+            badgeEl.style.background = 'var(--success)';
+            badgeEl.textContent = `🎯 YOUR SELECTION: ${companyName}`;
+          } else {
+            badgeEl.textContent = `✅ AI Match: Eligible for ${companyName}`;
+          }
+          card.prepend(badgeEl);
+
+          // MOVE TO TOP OF GRID
+          const grid = document.getElementById('companyGrid');
+          grid.prepend(card);
+
+          if (isExplicitlySelected) {
+            setTimeout(() => card.scrollIntoView({ behavior: 'smooth', block: 'center' }), 500);
+          }
+        }
+
+        // Add click listener
+        card.onclick = () => {
+          const today = new Date().toLocaleDateString();
+          const exists = history.some(h => h.company === companyName && h.date === today);
+          if (!exists) {
+            history.push({
+              student: studentName,
+              company: companyName,
+              lpa: lpa,
+              score: score,
+              date: today
+            });
+            localStorage.setItem('placementHistory', JSON.stringify(history));
+          }
+          window.location.href = `result.html?company=${companyName}&score=${score}&lpa=${lpa}&student=${studentName}`;
+        };
+
+        // Filter by score threshold
+        const cardTierVal = parseInt(card.getAttribute('data-tier'));
+        let minReq = 0;
+        if (cardTierVal >= 90) minReq = 85;
+        else if (cardTierVal >= 70) minReq = 70;
+        else minReq = 60;
+
+        if (score < minReq && !isExplicitlySelected) {
+          card.style.opacity = '0.4';
+          card.style.pointerEvents = 'none';
+          badge.innerHTML = `<span class="badge badge-danger">Requires ${minReq}%</span>`;
+        }
+      });
+    }
+  </script>
+</body>
+
+</html>

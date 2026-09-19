@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PlacePredict – Student Comparison</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.compare-table{width:100%;border-collapse:collapse;margin-top:24px;background:var(--bg-card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow-sm);}
+.compare-table th, .compare-table td{padding:20px;text-align:center;border:1px solid var(--border-light);}
+.compare-table th{background:rgba(108,76,241,0.05);font-weight:800;color:var(--text-primary);}
+.compare-table tr:hover{background:rgba(108,76,241,0.02);}
+.student-name-cell{display:flex;flex-direction:column;align-items:center;gap:8px;}
+.stat-highlight{font-weight:900;font-size:18px;color:var(--primary);}
+.winner-pill{background:var(--success);color:#fff;padding:4px 10px;border-radius:20px;font-size:10px;font-weight:700;margin-top:4px;}
+</style>
+</head>
+<body>
+<div class="glow-bg"></div><div class="glow-bg2"></div>
+<div class="app-layout">
+<aside class="sidebar">
+    <div class="logo-text">Place <span>Predict</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></a>
+    <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict Placement</span></a>
+    <a href="compare.html" class="nav-item active"><span class="nav-icon">⚖️</span><span class="nav-label">Student Comparison</span></a>
+    <div class="nav-section-label">Assessment</div>
+    <a href="assessment.html" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill Assessment</span></a>
+    <div class="nav-section-label">Opportunities</div>
+    <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span class="nav-label">Companies</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement Reports</span></a>
+    <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction History</span></a>
+    <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <nav class="navbar">
+    <div class="navbar-actions">
+      <div class="icon-btn" data-tooltip="Refresh" onclick="location.reload()">🔄</div>
+      <div class="icon-btn" data-tooltip="Toggle Theme" onclick="toggleTheme()">🌓</div>
+      <div class="user-avatar" id="navAvatar">U</div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title">Peer Comparison</h1>
+      <p class="page-subtitle">Compare your profile with peers to see AI placement predictions</p>
+    </div>
+
+    <!-- DATA ENTRY FORM -->
+    <div class="card" style="margin-bottom:24px;">
+      <h3 class="section-title">📝 Student Data Input</h3>
+      <div id="studentInputs" style="display:grid; grid-template-columns:repeat(5, 1fr); gap:12px;">
+        <!-- STUDENT 1 (YOU) -->
+        <div class="student-entry" style="background:rgba(147, 51, 234, 0.05); padding:12px; border-radius:12px; border:1px solid var(--primary);">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--primary);">Student 1 (You)</div>
+          <input type="text" class="form-input" id="name0" placeholder="Your Name" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="cgpa0_in" placeholder="CGPA" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="proj0_in" placeholder="Projects" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="int0_in" placeholder="Internships" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="back0_in" placeholder="Backlogs" style="font-size:11px; margin-bottom:4px;">
+          <input type="text" class="form-input" id="skill0_in" placeholder="Primary Skill" style="font-size:11px;">
+        </div>
+        <div class="student-entry">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--secondary);">Student 2</div>
+          <input type="text" class="form-input" id="name1" placeholder="Name" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="cgpa1_in" placeholder="CGPA" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="proj1_in" placeholder="Projects" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="int1_in" placeholder="Internships" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="back1_in" placeholder="Backlogs" value="0" style="font-size:11px; margin-bottom:4px;">
+          <input type="text" class="form-input" id="skill1_in" placeholder="Primary Skill" style="font-size:11px;">
+        </div>
+        <div class="student-entry">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--accent-cyan);">Student 3</div>
+          <input type="text" class="form-input" id="name2" placeholder="Name" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="cgpa2_in" placeholder="CGPA" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="proj2_in" placeholder="Projects" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="int2_in" placeholder="Internships" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="back2_in" placeholder="Backlogs" value="0" style="font-size:11px; margin-bottom:4px;">
+          <input type="text" class="form-input" id="skill2_in" placeholder="Primary Skill" style="font-size:11px;">
+        </div>
+        <div class="student-entry">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--warning);">Student 4</div>
+          <input type="text" class="form-input" id="name3" placeholder="Name" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="cgpa3_in" placeholder="CGPA" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="proj3_in" placeholder="Projects" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="int3_in" placeholder="Internships" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="back3_in" placeholder="Backlogs" value="0" style="font-size:11px; margin-bottom:4px;">
+          <input type="text" class="form-input" id="skill3_in" placeholder="Primary Skill" style="font-size:11px;">
+        </div>
+        <div class="student-entry">
+          <div style="font-weight:700; margin-bottom:8px; color:var(--success);">Student 5</div>
+          <input type="text" class="form-input" id="name4" placeholder="Name" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="cgpa4_in" placeholder="CGPA" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="proj4_in" placeholder="Projects" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="int4_in" placeholder="Internships" style="font-size:11px; margin-bottom:4px;">
+          <input type="number" class="form-input" id="back4_in" placeholder="Backlogs" value="0" style="font-size:11px; margin-bottom:4px;">
+          <input type="text" class="form-input" id="skill4_in" placeholder="Primary Skill" style="font-size:11px;">
+        </div>
+      </div>
+      <button class="btn btn-primary" style="width:100%; margin-top:16px;" onclick="runComparison()">⚡ Predict & Compare Students</button>
+    </div>
+
+    <table class="compare-table animate-fade-up">
+      <thead>
+        <tr id="tableHeader">
+          <th>Metric</th>
+          <th id="h0">Jebin Justin</th>
+          <th id="h1">Student 2</th>
+          <th id="h2">Student 3</th>
+          <th id="h3">Student 4</th>
+          <th id="h4">Student 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Profile</strong></td>
+          <td><div class="student-name-cell"><div id="v0" class="user-avatar">J</div></div></td>
+          <td><div class="student-name-cell"><div id="v1" class="user-avatar" style="background:var(--secondary);">?</div></div></td>
+          <td><div class="student-name-cell"><div id="v2" class="user-avatar" style="background:var(--accent-cyan);">?</div></div></td>
+          <td><div class="student-name-cell"><div id="v3" class="user-avatar" style="background:var(--warning);">?</div></div></td>
+          <td><div class="student-name-cell"><div id="v4" class="user-avatar" style="background:var(--success);">?</div></div></td>
+        </tr>
+        <tr>
+          <td><strong>CGPA</strong></td>
+          <td id="cgpa0">--</td>
+          <td id="cgpa1">--</td>
+          <td id="cgpa2">--</td>
+          <td id="cgpa3">--</td>
+          <td id="cgpa4">--</td>
+        </tr>
+        <tr>
+          <td><strong>Projects</strong></td>
+          <td id="proj0">--</td>
+          <td id="proj1">--</td>
+          <td id="proj2">--</td>
+          <td id="proj3">--</td>
+          <td id="proj4">--</td>
+        </tr>
+        <tr>
+          <td><strong>Internships</strong></td>
+          <td id="int0">--</td>
+          <td id="int1">--</td>
+          <td id="int2">--</td>
+          <td id="int3">--</td>
+          <td id="int4">--</td>
+        </tr>
+        <tr>
+          <td><strong>Predictive Score</strong></td>
+          <td><span id="score0" class="stat-highlight">--</span></td>
+          <td><span id="score1" class="stat-highlight">--</span></td>
+          <td><span id="score2" class="stat-highlight">--</span></td>
+          <td><span id="score3" class="stat-highlight">--</span></td>
+          <td><span id="score4" class="stat-highlight">--</span></td>
+        </tr>
+        <tr>
+          <td><strong>Salary Potent.</strong></td>
+          <td id="sal0">--</td>
+          <td id="sal1">--</td>
+          <td id="sal2">--</td>
+          <td id="sal3">--</td>
+          <td id="sal4">--</td>
+        </tr>
+        <tr>
+          <td><strong>Key Skill</strong></td>
+          <td id="skill0">--</td>
+          <td id="skill1">--</td>
+          <td id="skill2">--</td>
+          <td id="skill3">--</td>
+          <td id="skill4">--</td>
+        </tr>
+        <tr>
+          <td><strong>Backlogs</strong></td>
+          <td id="back0">--</td>
+          <td id="back1">--</td>
+          <td id="back2">--</td>
+          <td id="back3">--</td>
+          <td id="back4">--</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="aiInsight" class="card" style="margin-top:32px; border-left:4px solid var(--primary); display:none;">
+      <h3 class="section-title">🤖 AI Comparative Analysis</h3>
+      <p id="insightText" style="font-size:14px; line-height:1.7; color:var(--text-secondary);"></p>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const target = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', target);
+  localStorage.setItem('theme', target);
+}
+(function() {
+  const saved = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', saved);
+
+  // Load session user data
+  const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+  if (session.isLoggedIn) {
+      document.getElementById('navAvatar').innerText = (session.name || "U").charAt(0).toUpperCase();
+  } else {
+      window.location.href = 'login.html';
+  }
+})();
+
+function runComparison() {
+  const btn = event.target;
+  btn.innerText = "🤖 AI Predicting...";
+  btn.disabled = true;
+
+  let bestScore = -1;
+  let bestStudent = null;
+
+  for(let i=0; i<5; i++) {
+    const name = document.getElementById(`name${i}`).value || `Student ${i+1}`;
+    const cgpa = parseFloat(document.getElementById(`cgpa${i}_in`).value) || 0;
+    const projects = parseInt(document.getElementById(`proj${i}_in`).value) || 0;
+    const intern = parseInt(document.getElementById(`int${i}_in`).value) || 0;
+    const backlogs = parseInt(document.getElementById(`back${i}_in`).value) || 0;
+    const skills = document.getElementById(`skill${i}_in`).value || 'N/A';
+    
+    // Prediction logic
+    // STRICT ZERO CHECK
+    let score = 0;
+    if (cgpa > 0) {
+      score = Math.min(99, Math.round((cgpa/10)*60 + projects*3 + intern*5 - backlogs*5));
+    }
+    
+    if (score > bestScore) {
+      bestScore = score;
+      bestStudent = { name, score };
+    }
+
+    // 60% THRESHOLD CHECK
+    let lpa = 0;
+    let lpaDisplay = "Not Selected";
+    if (score >= 60) {
+      lpa = Math.round((score/100)*35);
+      lpaDisplay = lpa + " LPA";
+    }
+
+    // Update UI
+    document.getElementById(`h${i}`).innerText = name;
+    document.getElementById(`v${i}`).innerText = name.charAt(0);
+    document.getElementById(`cgpa${i}`).innerText = cgpa;
+    document.getElementById(`proj${i}`).innerText = projects;
+    document.getElementById(`int${i}`).innerText = intern;
+    document.getElementById(`back${i}`).innerText = backlogs;
+    document.getElementById(`skill${i}`).innerText = skills;
+
+    setTimeout(() => {
+      animateValue("score" + i, 0, score, 1000, "%");
+      
+      const lpaObj = document.getElementById("sal" + i);
+      if (score < 60) {
+        lpaObj.innerHTML = `<span style="color:var(--danger); font-size:11px;">${lpaDisplay}</span>`;
+      } else {
+        animateValue("sal" + i, 0, lpa, 1200, " LPA");
+      }
+      
+      if(i === 4) {
+        setTimeout(() => {
+          document.getElementById('aiInsight').style.display = 'block';
+          document.getElementById('insightText').innerHTML = `
+            Benchmarking complete. <strong>${bestStudent.name}</strong> is the top performer with <strong>${bestStudent.score}%</strong> probability. 
+            Students with scores above 60% are eligible for matching.
+            <div style="margin-top:20px; text-align:right;">
+              <button class="btn btn-primary" onclick="goToMatching(${bestScore})">Next: View Best Student Matches &nbsp;→</button>
+            </div>
+          `;
+          btn.innerText = "⚡ Analysis Complete";
+          btn.disabled = false;
+        }, 1500);
+      }
+    }, i * 300);
+  }
+}
+
+function goToMatching(score) {
+  window.location.href = `companies.html?source=comparison&score=${score}`;
+}
+
+function animateValue(id, start, end, duration, suffix = "") {
+  const obj = document.getElementById(id);
+  let startTimestamp = null;
+  const step = (timestamp) => {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    obj.innerHTML = Math.floor(progress * (end - start) + start) + suffix;
+    if (progress < 1) {
+      window.requestAnimationFrame(step);
+    }
+  };
+  window.requestAnimationFrame(step);
+}
+
+// SESSION INITIALIZATION
+(function initUserSession() {
+    const session = JSON.parse(localStorage.getItem('placePredictSession'));
+    if (!session || !session.isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    const navAvatar = document.getElementById('navAvatar');
+    const nameInput0 = document.getElementById('name0');
+
+    if (navAvatar) {
+        if (session.picture) {
+            navAvatar.innerHTML = `<img src="${session.picture}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+        } else {
+            navAvatar.textContent = session.name.charAt(0).toUpperCase();
+        }
+    }
+    if (nameInput0) nameInput0.value = session.name;
+})();
+</script>
+</body>
+</html>

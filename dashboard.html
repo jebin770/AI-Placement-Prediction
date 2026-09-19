@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PlacePredict – Dashboard</title>
+<link rel="stylesheet" href="styles.css"/>
+<style>
+.hero-section{background:var(--gradient);border-radius:var(--radius-lg);padding:60px 40px;color:#fff;position:relative;overflow:hidden;margin-bottom:28px;display:flex;justify-content:center;text-align:center;}
+.hero-content{position:relative;z-index:1;max-width:700px;margin:0 auto;}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,0.12);padding:8px 18px;border-radius:30px;font-size:12px;font-weight:700;margin-bottom:28px;backdrop-filter:blur(10px);letter-spacing:0.5px;text-transform:uppercase;}
+.hero-title{font-family:'Outfit',sans-serif;font-size:52px;font-weight:800;line-height:1.1;margin-bottom:20px;letter-spacing:-1.5px;}
+.hero-title em { font-style: normal; text-decoration: underline; text-underline-offset: 8px; text-decoration-color: rgba(255,255,255,0.4); }
+.hero-subtitle{font-size:15px;opacity:0.85;line-height:1.6;margin-bottom:24px;}
+.hero-btns{display:flex;gap:12px;flex-wrap:wrap;}
+.hero-btn-white{background:#fff;color:var(--primary);padding:12px 24px;border-radius:50px;font-weight:700;font-size:14px;cursor:pointer;border:none;display:flex;align-items:center;gap:8px;box-shadow:0 4px 16px rgba(0,0,0,0.12);transition:all 0.2s;}
+.hero-btn-white:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,0.18);}
+.hero-btn-outline{background:rgba(255,255,255,0.15);color:#fff;padding:12px 24px;border-radius:50px;font-weight:700;font-size:14px;cursor:pointer;border:1.5px solid rgba(255,255,255,0.4);display:flex;align-items:center;gap:8px;backdrop-filter:blur(4px);transition:all 0.2s;}
+.hero-btn-outline:hover{background:rgba(255,255,255,0.25);}
+.hero-float-cards{position:absolute;right:32px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:10px;z-index:2;}
+.float-card{background:rgba(255,255,255,0.18);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,0.3);border-radius:14px;padding:14px 18px;color:#fff;min-width:160px;animation:float 3s ease-in-out infinite;}
+.float-card:nth-child(2){animation-delay:0.5s;}
+.float-card:nth-child(3){animation-delay:1s;}
+.float-card-label{font-size:11px;opacity:0.75;margin-bottom:2px;}
+.float-card-value{font-size:20px;font-weight:800;font-family:'Outfit',sans-serif;}
+.float-card-sub{font-size:11px;opacity:0.7;}
+
+.ai-pulse{display:inline-flex;align-items:center;gap:6px;}
+.ai-pulse-dot{width:8px;height:8px;background:#4ade80;border-radius:50%;animation:pulse 1.5s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.6;transform:scale(1.3);}}
+
+.quick-actions{display:flex;gap:12px;margin-bottom:28px;flex-wrap:wrap;}
+.quick-action{flex:1;min-width:140px;background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:18px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;transition:all 0.2s;text-decoration:none;box-shadow:var(--shadow-sm);}
+.quick-action:hover{border-color:var(--primary);background:rgba(108,76,241,0.05);transform:translateY(-2px);box-shadow:var(--shadow);}
+.qa-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.qa-label{font-size:13px;font-weight:600;color:var(--text-secondary);text-align:center;}
+
+.recruiters-grid{display:flex;gap:12px;flex-wrap:wrap;align-items:center;}
+.recruiter-card{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;transition:all 0.2s;}
+.recruiter-card:hover .company-logo{border-color:var(--primary);transform:translateY(-3px);box-shadow:var(--shadow);}
+.recruiter-name{font-size:11px;font-weight:600;color:var(--text-muted);}
+
+.improve-item{display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid var(--border-light);}
+.improve-item:last-child{border-bottom:none;padding-bottom:0;}
+.improve-icon{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.improve-info{flex:1;}
+.improve-title{font-size:14px;font-weight:600;color:var(--text-primary);margin-bottom:2px;}
+.improve-desc{font-size:12px;color:var(--text-muted);}
+.improve-action{font-size:12px;font-weight:600;color:var(--primary);cursor:pointer;white-space:nowrap;}
+
+.ai-feature-card{background:var(--bg-card);border:1px solid var(--glass-border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow-sm);transition:all 0.25s;cursor:pointer;position:relative;overflow:hidden;}
+.ai-feature-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);transform:scaleX(0);transition:transform 0.3s;transform-origin:left;}
+.ai-feature-card:hover::before{transform:scaleX(1);}
+.ai-feature-card:hover{box-shadow:var(--shadow-lg);transform:translateY(-3px);}
+.aif-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;margin-bottom:12px;}
+.aif-title{font-size:14px;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+.aif-desc{font-size:12px;color:var(--text-muted);line-height:1.5;}
+
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--border-light);}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.activity-text{font-size:13px;color:var(--text-primary);line-height:1.4;}
+.activity-time{font-size:11px;color:var(--text-muted);margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="glow-bg"></div>
+<div class="glow-bg2"></div>
+<div class="app-layout">
+
+<!-- SIDEBAR -->
+<aside class="sidebar" id="sidebar">
+    <div class="logo-text">Place <span>Predict</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item active"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></a>
+    <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict Placement</span></a>
+    <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student Comparison</span></a>
+    <div class="nav-section-label">Assessment</div>
+    <a href="assessment.html" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill Assessment</span><span class="nav-badge">New</span></a>
+    <div class="nav-section-label">Opportunities</div>
+    <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span class="nav-label">Companies</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement Reports</span></a>
+    <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction History</span></a>
+    <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+    <div class="nav-section-label">System</div>
+    <a href="javascript:void(0)" class="nav-item" onclick="toggleTheme()"><span class="nav-icon">🌓</span><span class="nav-label">Toggle Theme</span></a>
+    <a href="javascript:void(0)" class="nav-item" onclick="logout()"><span class="nav-icon">🚪</span><span class="nav-label">Logout</span></a>
+  </nav>
+  <div class="sidebar-premium">
+    <div class="premium-title">⚡ Upgrade to Pro</div>
+    <div class="premium-desc">Unlock AI career guidance, unlimited predictions & more.</div>
+    <button class="premium-btn">Upgrade Now →</button>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<div class="main-content">
+  <nav class="navbar">
+    <div class="navbar-title" id="welcomeText">Welcome, <span>Student</span> 👋</div>
+    <div class="navbar-actions">
+      <div class="icon-btn" data-tooltip="Refresh" onclick="location.reload()">🔄</div>
+      <div class="icon-btn" data-tooltip="Toggle Theme" onclick="toggleTheme()">🌓</div>
+      <div class="icon-btn" data-tooltip="Notifications">🔔<span class="notif-dot"></span></div>
+      <div class="user-avatar" id="navAvatar" onclick="window.location.href='settings.html'">S</div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+
+    <!-- HERO -->
+    <div class="hero-section animate-fade-up">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="ai-pulse"><span class="ai-pulse-dot"></span> System Active</span>
+          <span style="opacity: 0.5; margin: 0 4px;">|</span>
+          Placement Engine v2.0
+        </div>
+        
+        <div class="logo-text" style="font-size: 38px; justify-content: center; margin-bottom: 28px; color: #fff; display: flex; align-items: center; gap: 15px;">
+          <div style="width: 38px; height: 38px; background: #fff; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-weight: 800; font-size: 22px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">P</div>
+          Place <span style="color: #fff; opacity: 0.8;">Predict</span>
+        </div>
+
+        <h1 class="hero-title">Predict. Prepare.<br>Get <em>Placed.</em> 🚀</h1>
+        
+        <p class="hero-subtitle" style="margin: 0 auto 32px; max-width: 620px; font-size: 16px; opacity: 0.9; line-height: 1.7;">
+          Our AI analyzes 50+ parameters to give you a hyper-accurate placement prediction and personalized roadmap.
+        </p>
+
+        <div class="hero-btns" style="justify-content: center;">
+          <button class="hero-btn-white" style="padding: 16px 36px; font-size: 15px;" onclick="window.location.href='predict.html'">🔮 Predict Your Placement</button>
+        </div>
+      </div>
+      <div class="hero-float-cards">
+        <div class="float-card">
+          <div class="float-card-label">Your Placement Chance</div>
+          <div class="float-card-value">0%</div>
+          <div class="float-card-sub">No predictions yet</div>
+        </div>
+        <div class="float-card">
+          <div class="float-card-label">AI Accuracy</div>
+          <div class="float-card-value">96.7%</div>
+          <div class="float-card-sub">Based on 50k+ students</div>
+        </div>
+        <div class="float-card">
+          <div class="float-card-label">Top Skill Match</div>
+          <div class="float-card-value">Python</div>
+          <div class="float-card-sub">💎 High demand</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="grid grid-4" style="margin-bottom:28px;">
+      <div class="stat-card animate-fade-up">
+        <div class="stat-icon" style="background:rgba(108,76,241,0.1);">🎓</div>
+        <div class="stat-value">1,24,567</div>
+        <div class="stat-label">Students Predicted</div>
+        <div class="stat-change up">↑ 12% this month</div>
+      </div>
+      <div class="stat-card animate-fade-up" style="animation-delay:0.1s;">
+        <div class="stat-icon" style="background:rgba(79,140,255,0.1);">🎯</div>
+        <div class="stat-value">96.7%</div>
+        <div class="stat-label">Prediction Accuracy</div>
+        <div class="stat-change up">↑ Industry leading</div>
+      </div>
+      <div class="stat-card animate-fade-up" style="animation-delay:0.2s;">
+        <div class="stat-icon" style="background:rgba(16,185,129,0.1);">🏢</div>
+        <div class="stat-value">840+</div>
+        <div class="stat-label">Partner Companies</div>
+        <div class="stat-change up">↑ 48 new this quarter</div>
+      </div>
+      <div class="stat-card animate-fade-up" style="animation-delay:0.3s;">
+        <div class="stat-icon" style="background:rgba(245,158,11,0.1);">💰</div>
+        <div class="stat-value">₹18.4 LPA</div>
+        <div class="stat-label">Highest Package</div>
+        <div class="stat-change up">↑ Google, Meta offers</div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="section-title">⚡ Quick Actions</div>
+    <div class="section-subtitle">Jump right into your most used features</div>
+    <div class="quick-actions">
+      <a href="predict.html" class="quick-action">
+        <div class="qa-icon" style="background:rgba(108,76,241,0.1);">🔮</div>
+        <span class="qa-label">Predict Placement</span>
+      </a>
+      <a href="compare.html" class="quick-action">
+        <div class="qa-icon" style="background:rgba(79,140,255,0.1);">⚖️</div>
+        <span class="qa-label">Student Compare</span>
+      </a>
+      <a href="assessment.html" class="quick-action">
+        <div class="qa-icon" style="background:rgba(16,185,129,0.1);">🧩</div>
+        <span class="qa-label">Skill Test</span>
+      </a>
+      <a href="companies.html" class="quick-action">
+        <div class="qa-icon" style="background:rgba(245,158,11,0.1);">🏢</div>
+        <span class="qa-label">Companies</span>
+      </a>
+      <a href="analytics.html" class="quick-action">
+        <div class="qa-icon" style="background:rgba(34,211,238,0.1);">📊</div>
+        <span class="qa-label">Analytics</span>
+      </a>
+    </div>
+
+    <!-- PLACEMENT ROADMAP -->
+    <div class="card animate-fade-up" style="margin-bottom:28px; border-top:4px solid var(--primary);">
+      <div class="section-title">🛣️ Your Placement Roadmap</div>
+      <div class="section-subtitle">A personalized path to your dream 35 LPA offer</div>
+      <div style="display:flex; justify-content:space-between; position:relative; padding-top:20px;">
+        <div style="position:absolute; top:45px; left:5%; right:5%; height:2px; background:var(--border); z-index:0;"></div>
+        
+        <div style="text-align:center; position:relative; z-index:1; width:20%;">
+          <div style="width:50px; height:50px; background:var(--success); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:20px; box-shadow:0 0 15px rgba(16,185,129,0.3);">✓</div>
+          <div style="font-size:12px; font-weight:700;">Foundation</div>
+          <div style="font-size:10px; color:var(--text-muted);">Completed</div>
+        </div>
+        
+        <div style="text-align:center; position:relative; z-index:1; width:20%;">
+          <div style="width:50px; height:50px; background:var(--primary); color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:20px; box-shadow:0 0 15px rgba(108,76,241,0.3);">🚀</div>
+          <div style="font-size:12px; font-weight:700;">Skill Up</div>
+          <div style="font-size:10px; color:var(--primary);">In Progress</div>
+        </div>
+
+        <div style="text-align:center; position:relative; z-index:1; width:20%;">
+          <div style="width:50px; height:50px; background:var(--bg-white); border:2px solid var(--border); color:var(--text-muted); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:20px;">💼</div>
+          <div style="font-size:12px; font-weight:700;">Internship</div>
+          <div style="font-size:10px; color:var(--text-muted);">Locked</div>
+        </div>
+
+        <div style="text-align:center; position:relative; z-index:1; width:20%;">
+          <div style="width:50px; height:50px; background:var(--bg-white); border:2px solid var(--border); color:var(--text-muted); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:20px;">🏆</div>
+          <div style="font-size:12px; font-weight:700;">Mock Tests</div>
+          <div style="font-size:10px; color:var(--text-muted);">Locked</div>
+        </div>
+
+        <div style="text-align:center; position:relative; z-index:1; width:20%;">
+          <div style="width:50px; height:50px; background:var(--bg-white); border:2px solid var(--border); color:var(--text-muted); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 10px; font-size:20px;">🎓</div>
+          <div style="font-size:12px; font-weight:700;">The Placement</div>
+          <div style="font-size:10px; color:var(--text-muted);">Final Goal</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI CAREER COACH INSIGHTS -->
+    <div class="grid grid-2" style="margin-bottom:28px; gap:24px;">
+      <div class="card animate-fade-up" style="border-left:5px solid var(--accent-cyan); background:linear-gradient(to right, var(--bg-card), rgba(34,211,238,0.05));">
+        <div class="section-title">📊 Career Coach Thoughts</div>
+        <div class="section-subtitle">Personalized feedback based on your profile & behavior</div>
+        <div style="font-size:14px; line-height:1.7; color:var(--text-secondary); margin-top:12px;">
+          "Jebin, your academic consistency is excellent. However, to break into the <strong>35 LPA+ tier</strong>, you should prioritize <strong>System Design</strong> and <strong>Cloud-native development</strong>. I've noticed you're active in Python — consider adding <strong>Go or Rust</strong> to your stack to stand out in backend roles."
+        </div>
+        <div style="margin-top:16px; display:flex; gap:12px;">
+          <span class="badge badge-primary">Skill Gap: System Design</span>
+          <span class="badge badge-success">Strength: Consistency</span>
+        </div>
+      </div>
+      
+      <div class="card animate-fade-up" style="border-left:5px solid var(--accent-pink); background:linear-gradient(to right, var(--bg-card), rgba(244,114,182,0.05));">
+        <div class="section-title">📈 Market Demand Trends</div>
+        <div class="section-subtitle">Real-time hiring data from 500+ tech companies</div>
+        <div class="grid grid-2" style="margin-top:12px; gap:12px;">
+          <div style="padding:10px; background:var(--bg); border-radius:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:var(--accent-pink);">+24%</div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">Full-Stack Roles</div>
+          </div>
+          <div style="padding:10px; background:var(--bg); border-radius:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:var(--success);">+18%</div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">AI/ML Engineer</div>
+          </div>
+          <div style="padding:10px; background:var(--bg); border-radius:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:var(--primary);">+32%</div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">Cloud DevOps</div>
+          </div>
+          <div style="padding:10px; background:var(--bg); border-radius:12px; text-align:center;">
+            <div style="font-size:20px; font-weight:800; color:var(--warning);">-5%</div>
+            <div style="font-size:10px; color:var(--text-muted); font-weight:700;">Manual QA</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-3" style="margin-bottom:28px;">
+      <!-- TOP RECRUITERS -->
+      <div class="card" style="grid-column:span 2;">
+        <div class="section-title">🏆 Top Recruiters</div>
+        <div class="section-subtitle">Companies actively hiring from our platform</div>
+        <div class="recruiters-grid">
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/google.png" alt="Google" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">Google</div></div>
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/microsoft.png" alt="Microsoft" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">Microsoft</div></div>
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/amazon.png" alt="Amazon" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">Amazon</div></div>
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/meta.png" alt="Meta" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">Meta</div></div>
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/infosys.png" alt="Infosys" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">Infosys</div></div>
+          <div class="recruiter-card"><div class="company-logo" style="background:#fff; border:1px solid var(--border-light); overflow:hidden;"><img src="assets/tcs.png" alt="TCS" style="width:100%; height:100%; object-fit:contain; padding:4px;"></div><div class="recruiter-name">TCS</div></div>
+        </div>
+      </div>
+
+      <!-- ACTIVITY -->
+      <div class="card">
+        <div class="section-title">🕐 Recent Activity</div>
+        <div class="section-subtitle" style="margin-bottom:12px;">Your latest actions</div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--primary);"></div>
+          <div><div class="activity-text">Placement prediction completed</div><div class="activity-time">2 hours ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--success);"></div>
+          <div><div class="activity-text">Comparison report generated</div><div class="activity-time">5 hours ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--secondary);"></div>
+          <div><div class="activity-text">Applied to Google SWE role</div><div class="activity-time">2 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--warning);"></div>
+          <div><div class="activity-text">Completed Python certification</div><div class="activity-time">3 days ago</div></div>
+        </div>
+        <div class="activity-item">
+          <div class="activity-dot" style="background:var(--accent-cyan);"></div>
+          <div><div class="activity-text">Skill assessment: DSA 74%</div><div class="activity-time">5 days ago</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RECOMMENDATIONS -->
+    <div class="grid grid-2" style="margin-bottom:28px;">
+      <div class="card">
+        <div class="section-title">🎯 Recommended Actions</div>
+        <div class="section-subtitle">AI-suggested actions to boost placement odds</div>
+        <div class="improve-item">
+          <div class="improve-icon" style="background:rgba(108,76,241,0.1);">💻</div>
+          <div class="improve-info">
+            <div class="improve-title">Improve DSA Skills</div>
+            <div class="improve-desc">Solve 30 more LeetCode problems for FAANG readiness</div>
+          </div>
+          <div class="improve-action">Start →</div>
+        </div>
+        <div class="improve-item">
+          <div class="improve-icon" style="background:rgba(79,140,255,0.1);">🏗️</div>
+          <div class="improve-info">
+            <div class="improve-title">Build 2 More Projects</div>
+            <div class="improve-desc">Full-stack projects dramatically increase hire rate</div>
+          </div>
+          <div class="improve-action">Explore →</div>
+        </div>
+        <div class="improve-item">
+          <div class="improve-icon" style="background:rgba(245,158,11,0.1);">🧠</div>
+          <div class="improve-info">
+            <div class="improve-title">Mock Interview</div>
+            <div class="improve-desc">Schedule a 1-on-1 AI mock interview to refine your soft skills</div>
+          </div>
+          <div class="improve-action">Schedule →</div>
+        </div>
+      </div>
+
+      <!-- FEATURES -->
+      <div class="card">
+        <div class="section-title">💼 Career Features</div>
+        <div class="section-subtitle">Supercharge your placement journey</div>
+        <div class="grid grid-2" style="gap:12px;">
+          <div class="ai-feature-card" onclick="window.location.href='assessment.html'">
+            <div class="aif-icon" style="background:rgba(108,76,241,0.1);">🧭</div>
+            <div class="aif-title">Skill Guidance</div>
+            <div class="aif-desc">Personalized roadmap based on your assessments</div>
+          </div>
+          <div class="ai-feature-card" onclick="window.location.href='predict.html'">
+            <div class="aif-icon" style="background:rgba(245,158,11,0.1);">💰</div>
+            <div class="aif-title">Salary Predictor</div>
+            <div class="aif-desc">Estimate expected CTC based on skills</div>
+          </div>
+          <div class="ai-feature-card">
+            <div class="aif-icon" style="background:rgba(239,68,68,0.1);">📊</div>
+            <div class="aif-title">Skill Gap Analysis</div>
+            <div class="aif-desc">Identify missing skills for target roles</div>
+          </div>
+          <div class="ai-feature-card">
+            <div class="aif-icon" style="background:rgba(34,211,238,0.1);">💬</div>
+            <div class="aif-title">AI Chat</div>
+            <div class="aif-desc">24/7 AI placement guidance assistant</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</div>
+<script>
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',function(){
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+</script>
+<!-- AI FLOATING ASSISTANT -->
+<div id="aiChatBubble" style="position:fixed; bottom:30px; right:30px; width:60px; height:60px; background:var(--gradient); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:28px; cursor:pointer; box-shadow:0 10px 30px rgba(108,76,241,0.5); z-index:1000; transition:transform 0.3s;" onclick="alert('AI Assistant: Hello Jebin! How can I help you with your placement journey today?')">
+  🤖
+  <div style="position:absolute; top:-5px; right:-5px; width:20px; height:20px; background:var(--danger); border:3px solid var(--bg-white); border-radius:50%;"></div>
+</div>
+
+<script>
+// SESSION INITIALIZATION
+(function initUserSession() {
+    const session = JSON.parse(localStorage.getItem('placePredictSession'));
+    if (!session || !session.isLoggedIn) {
+        window.location.href = 'login.html';
+        return;
+    }
+
+    // Update UI with Session Data
+    const welcomeText = document.getElementById('welcomeText');
+    const navAvatar = document.getElementById('navAvatar');
+
+    if (welcomeText) {
+        welcomeText.innerHTML = `Welcome, <span>${session.name}</span> 👋`;
+    }
+
+    if (navAvatar) {
+        if (session.picture) {
+            navAvatar.innerHTML = `<img src="${session.picture}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;" />`;
+        } else {
+            navAvatar.textContent = session.name.charAt(0).toUpperCase();
+        }
+    }
+})();
+
+// ANALYTICS & DASHBOARD LOGIC
+(function() {
+    // Theme initialization
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+    if (session.isLoggedIn) {
+        const welcomeSpan = document.querySelector('.navbar-title span');
+        if(welcomeSpan) welcomeSpan.textContent = session.name || 'User';
+        const userAvatar = document.querySelector('.user-avatar');
+        if(userAvatar) userAvatar.textContent = (session.name || 'U').charAt(0).toUpperCase();
+    } else {
+        // Only redirect if not on login/register (but we are on dashboard)
+        window.location.href = 'login.html';
+    }
+
+    const history = JSON.parse(localStorage.getItem('placementHistory') || '[]');
+    const latest = history[history.length - 1] || {};
+    
+    if (latest.score) {
+        // Update hero float cards
+        const floatValues = document.querySelectorAll('.float-card-value');
+        if(floatValues[0]) floatValues[0].textContent = latest.score.toFixed(1) + '%';
+        
+        const floatSubs = document.querySelectorAll('.float-card-sub');
+        const prevScore = history.length > 1 ? history[history.length - 2].score : 80;
+        const diff = latest.score - prevScore;
+        if(floatSubs[0]) floatSubs[0].textContent = (diff >= 0 ? '↑ +' : '↓ ') + Math.abs(diff).toFixed(1) + '% from last';
+
+        // Update Roadmap dynamically
+        const roadmapItems = document.querySelectorAll('.card [style*="text-align:center"]');
+        if (latest.score >= 60) {
+            // Foundation & Skill Up
+            updateRoadmap(roadmapItems[0], '✓', 'var(--success)');
+            updateRoadmap(roadmapItems[1], '✓', 'var(--success)');
+        }
+        if (latest.score >= 80) {
+            // Internship
+            updateRoadmap(roadmapItems[2], '🚀', 'var(--primary)');
+        }
+    } else {
+        // Zero state
+        const floatValues = document.querySelectorAll('.float-card-value');
+        if(floatValues[0]) floatValues[0].textContent = '0.0%';
+        const floatSubs = document.querySelectorAll('.float-card-sub');
+        if(floatSubs[0]) floatSubs[0].textContent = 'Predict to see results';
+    }
+})();
+
+function updateRoadmap(el, icon, color) {
+    if(!el) return;
+    const dot = el.querySelector('div');
+    const label = el.querySelector('div:last-child');
+    if(dot) {
+        dot.textContent = icon;
+        dot.style.background = color;
+        dot.style.boxShadow = `0 0 15px ${color}4D`;
+    }
+    if(label) {
+        label.textContent = 'Completed';
+        label.style.color = color;
+    }
+}
+
+function toggleTheme() {
+  const html = document.documentElement;
+  const current = html.getAttribute('data-theme');
+  const target = current === 'dark' ? 'light' : 'dark';
+  html.setAttribute('data-theme', target);
+  localStorage.setItem('theme', target);
+}
+
+
+function logout() {
+  localStorage.setItem('placePredictSession', JSON.stringify({isLoggedIn: false}));
+  window.location.href = 'login.html';
+}
+
+window.addEventListener('scroll', () => {
+  const bubble = document.getElementById('aiChatBubble');
+  if(window.scrollY > 100) {
+    bubble.style.transform = 'scale(1.1)';
+  } else {
+    bubble.style.transform = 'scale(1)';
+  }
+});
+</script>
+</body>
+</html>

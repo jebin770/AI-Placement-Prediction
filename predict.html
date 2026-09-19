@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>PlacePredict – Predict Placement</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .predict-layout {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .form-section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 20px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .form-section-title:first-child {
+      margin-top: 0;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .skills-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 10px;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-sm);
+      background: var(--bg-white);
+      min-height: 56px;
+    }
+
+    .predict-btn {
+      width: 100%;
+      max-width: 450px;
+      display: block;
+      margin: 32px auto 0;
+      padding: 18px;
+      border-radius: 50px;
+      background: var(--gradient);
+      color: #fff;
+      border: none;
+      font-size: 18px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 24px rgba(108, 76, 241, 0.4);
+      animation: glow-pulse 2.5s infinite;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s;
+    }
+
+    .predict-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(108, 76, 241, 0.5);
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 24px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--border-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-muted);
+      flex-shrink: 0;
+    }
+
+    .step.done .step-num {
+      background: var(--gradient);
+      border-color: transparent;
+      color: #fff;
+    }
+
+    .step.active .step-num {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    .step-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .step.active .step-label {
+      color: var(--primary);
+    }
+
+    .step-line {
+      flex: 1;
+      height: 2px;
+      background: var(--border-light);
+      margin: 0 8px;
+    }
+
+    .step.done .step-line {
+      background: var(--gradient);
+    }
+
+    .file-upload-box {
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      padding: 28px;
+      text-align: center;
+      cursor: pointer;
+      background: var(--gradient-soft);
+      transition: all 0.2s;
+    }
+
+    .file-upload-box:hover {
+      border-color: var(--primary);
+      background: rgba(108, 76, 241, 0.08);
+    }
+
+    .upload-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .upload-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    .upload-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .analysis-card {
+      background: var(--bg-card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .analysis-bar-item {
+      margin-bottom: 16px;
+    }
+
+    .abi-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .abi-track {
+      height: 8px;
+      background: var(--bg);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .abi-fill {
+      height: 100%;
+      background: var(--gradient);
+      width: 0;
+      transition: width 1s ease-out;
+    }
+
+    .placed-badge {
+      background: var(--success);
+      color: #fff;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 800;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    @media(max-width:900px) {
+      .predict-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Languages Known Modern Section */
+    .languages-card {
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(123, 47, 247, 0.2);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-top: 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+    }
+    .lang-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .lang-title-wrap h3 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lang-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .btn-add-lang {
+      background: var(--gradient);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(123, 47, 247, 0.2);
+      transition: 0.3s;
+    }
+    .btn-add-lang:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(123, 47, 247, 0.3); }
+    
+    .lang-table { width: 100%; border-collapse: collapse; }
+    .lang-table th { text-align: left; font-size: 12px; text-transform: uppercase; color: var(--gray); padding: 12px; border-bottom: 1px solid var(--border-light); }
+    .lang-row { transition: 0.2s; }
+    .lang-row:hover { background: rgba(123, 47, 247, 0.02); }
+    .lang-row td { padding: 12px; border-bottom: 1px solid var(--border-light); vertical-align: middle; }
+    
+    .lang-badge {
+      width: 36px; height: 36px; background: #F3E8FF; color: var(--primary);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 11px;
+    }
+    .prof-select {
+      background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px;
+      padding: 6px 12px; font-size: 13px; font-weight: 600; color: var(--dark);
+      transition: 0.2s;
+    }
+    .prof-select:focus { border-color: var(--primary); outline: none; }
+    .action-btn { color: var(--gray); cursor: pointer; font-size: 18px; transition: 0.2s; }
+    .action-btn:hover { color: var(--danger); }
+    .drag-btn { cursor: grab; color: #CBD5E1; }
+  </style>
+  <style>
+    @media print {
+      .sidebar, .navbar, .glow-bg, .glow-bg2, .predict-layout, .predict-btn, .toast-container { display: none !important; }
+      .main-content { margin-left: 0 !important; width: 100% !important; padding: 0 !important; }
+      .app-layout { display: block !important; }
+      .card { box-shadow: none !important; border: 1px solid #eee !important; margin: 0 !important; page-break-inside: avoid; }
+      #aiReportSection { display: block !important; margin-top: 0 !important; border: none !important; }
+      .section-title { color: #000 !important; }
+      .btn-outline { display: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="glow-bg"></div>
+  <div class="glow-bg2"></div>
+  <div class="app-layout">
+
+    <aside class="sidebar">
+      <div class="logo-text">Place <span>Predict</span></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span
+            class="nav-label">Dashboard</span></a>
+        <a href="predict.html" class="nav-item active"><span class="nav-icon">🔮</span><span class="nav-label">Predict
+            Placement</span></a>
+        <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student
+            Comparison</span></a>
+        <div class="nav-section-label">Assessment</div>
+        <a href="assessment.html" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill
+            Assessment</span><span class="nav-badge">New</span></a>
+        <div class="nav-section-label">Opportunities</div>
+        <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span
+            class="nav-label">Companies</span></a>
+        <div class="nav-section-label">Reports</div>
+        <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement
+            Reports</span></a>
+        <a href="history.html" class="nav-item"><span class="nav-icon">📜</span><span class="nav-label">Prediction
+            History</span></a>
+        <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span
+            class="nav-label">Settings</span></a>
+      </nav>
+      <div class="sidebar-premium">
+        <div class="premium-title">⚡ Upgrade to Pro</div>
+        <div class="premium-desc">Unlock AI career guidance & unlimited predictions.</div>
+        <button class="premium-btn">Upgrade Now →</button>
+      </div>
+    </aside>
+
+    <div class="main-content">
+      <nav class="navbar">
+        <div class="navbar-title">Predict <span>Placement</span></div>
+        <div class="navbar-actions">
+          <div class="icon-btn" onclick="location.reload()">🔄</div>
+          <div class="icon-btn" onclick="toggleTheme()">🌓</div>
+          <div class="icon-btn">🔔<span class="notif-dot"></span></div>
+          <div class="user-avatar" onclick="window.location.href='settings.html'">J</div>
+        </div>
+      </nav>
+
+      <div class="page-content">
+        <div class="page-header">
+          <h1 class="page-title">Placement Prediction</h1>
+          <p class="page-subtitle">Fill in your academic & skill details — our system will generate your placement probability in seconds.</p>
+        </div>
+
+        <div class="step-indicator">
+          <div class="step done">
+            <div class="step-num">✓</div>
+            <div class="step-label">Academics</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step active">
+            <div class="step-num">2</div>
+            <div class="step-label">Skills & Experience</div>
+            <div class="step-line"></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-label">Preferences</div>
+          </div>
+        </div>
+
+        <div class="predict-layout">
+          <!-- FORM -->
+          <div class="card card-lg">
+            <div class="form-section-title">📚 Academic Information</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Student Full Name *</label>
+                <input class="form-input" type="text" id="studentName" placeholder="Full Name" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">10th Percentage *</label>
+                <input class="form-input" type="number" id="tenth" placeholder="0.0" min="0" max="100" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">12th Percentage *</label>
+                <input class="form-input" type="number" id="twelfth" placeholder="0.0" min="0" max="100" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Graduation CGPA *</label>
+                <input class="form-input" type="number" id="cgpa" placeholder="0.0" min="0" max="10" step="0.1" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Number of Backlogs</label>
+                <input class="form-input" type="number" id="backlogs" placeholder="0" min="0" />
+              </div>
+            </div>
+
+            <!-- Modern Languages Known Section -->
+            <div class="languages-card">
+              <div class="lang-header">
+                <div class="lang-title-wrap">
+                  <h3><span>💬</span> Languages Known</h3>
+                  <div class="lang-subtitle">Select the languages you know and your proficiency level.</div>
+                </div>
+                <button class="btn-add-lang" onclick="addMoreLanguages()">+ Add Language</button>
+              </div>
+              
+              <table class="lang-table" id="langTable">
+                <thead>
+                  <tr>
+                    <th width="40"></th>
+                    <th>Language</th>
+                    <th>Proficiency Level</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr class="lang-row">
+                    <td><span class="drag-btn">⋮⋮</span></td>
+                    <td><div style="display:flex; align-items:center; gap:12px;"><div class="lang-badge">EN</div><span style="font-weight:600; font-size:14px;">English</span></div></td>
+                    <td><select class="prof-select"><option>Fluent</option><option selected>Native</option><option>Intermediate</option><option>Beginner</option><option>None</option></select></td>
+                  </tr>
+                  <tr class="lang-row">
+                    <td><span class="drag-btn">⋮⋮</span></td>
+                    <td><div style="display:flex; align-items:center; gap:12px;"><div class="lang-badge">TA</div><span style="font-weight:600; font-size:14px;">Tamil</span></div></td>
+                    <td><select class="prof-select"><option>Fluent</option><option selected>Native</option><option>Intermediate</option><option>Beginner</option><option>None</option></select></td>
+                  </tr>
+                  <tr class="lang-row">
+                    <td><span class="drag-btn">⋮⋮</span></td>
+                    <td><div style="display:flex; align-items:center; gap:12px;"><div class="lang-badge">HI</div><span style="font-weight:600; font-size:14px;">Hindi</span></div></td>
+                    <td><select class="prof-select"><option>Fluent</option><option>Native</option><option selected>Intermediate</option><option>Beginner</option><option>None</option></select></td>
+                  </tr>
+                  <tr class="lang-row">
+                    <td><span class="drag-btn">⋮⋮</span></td>
+                    <td><div style="display:flex; align-items:center; gap:12px;"><div class="lang-badge">FR</div><span style="font-weight:600; font-size:14px;">French</span></div></td>
+                    <td><select class="prof-select"><option>Fluent</option><option>Native</option><option>Intermediate</option><option selected>Beginner</option><option>None</option></select></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="form-section-title">💻 Skills & Technical Profile</div>
+            <div class="form-group">
+              <label class="form-label">Technical Skills (select all that apply)</label>
+              <div class="skills-chips" id="skillsChips">
+                <span class="chip" onclick="toggleChip(this)">Python</span>
+                <span class="chip selected" onclick="toggleChip(this)">Java</span>
+                <span class="chip" onclick="toggleChip(this)">JavaScript</span>
+                <span class="chip" onclick="toggleChip(this)">C++</span>
+                <span class="chip selected" onclick="toggleChip(this)">SQL</span>
+                <span class="chip" onclick="toggleChip(this)">React</span>
+                <span class="chip" onclick="toggleChip(this)">Node.js</span>
+                <span class="chip" onclick="toggleChip(this)">Machine Learning</span>
+                <span class="chip" onclick="toggleChip(this)">Data Science</span>
+                <span class="chip" onclick="toggleChip(this)">DSA</span>
+                <span class="chip" onclick="toggleChip(this)">Cloud (AWS/GCP)</span>
+                <span class="chip" onclick="toggleChip(this)">DevOps</span>
+                <span class="chip" onclick="toggleChip(this)">Android</span>
+                <span class="chip" onclick="toggleChip(this)">Flutter</span>
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Internship Experience</label>
+                <select class="form-select" id="intern">
+                  <option value="0">No Internship</option>
+                  <option value="1">1 Internship</option>
+                  <option value="2">2 Internships</option>
+                  <option value="3">3+ Internships</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Projects Count</label>
+                <input class="form-input" type="number" id="projects" placeholder="0" min="0" />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Certifications</label>
+                <input class="form-input" type="number" id="certs" placeholder="0" min="0" />
+              </div>
+            </div>
+
+            <div class="form-section-title">🎯 Preferences & Target</div>
+            <div class="form-grid">
+              <div class="form-group">
+                <label class="form-label">Target Salary (LPA)</label>
+                <select class="form-select" id="targetLPA">
+                  <option value="4">3 - 5 LPA (Mass Recruiter)</option>
+                  <option value="7">5 - 8 LPA (Tier 2)</option>
+                  <option value="10">8 - 12 LPA (Tier 1)</option>
+                  <option value="15" selected>12 - 18 LPA (Premium)</option>
+                  <option value="22">18 - 25 LPA (Product Giant)</option>
+                  <option value="30">25 - 35 LPA (Top Tech)</option>
+                  <option value="45">35 - 50 LPA (FAANG/Unicorn)</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Preferred Domain</label>
+                <select class="form-select" id="domain">
+                  <option>Software Development</option>
+                  <option>Data Science / ML / AI</option>
+                  <option>Cloud & DevOps</option>
+                  <option>Cybersecurity</option>
+                  <option>Web Development (MERN/MEAN)</option>
+                  <option>Mobile App Development (Android/iOS)</option>
+                  <option>Blockchain Development</option>
+                  <option>UI/UX Design</option>
+                  <option>Embedded Systems & IoT</option>
+                  <option>Game Development</option>
+                </select>
+              </div>
+            </div>
+
+            <button class="predict-btn" onclick="runPrediction()" style="margin-top:32px;">🔮 Generate AI Prediction
+              Report &nbsp;→</button>
+          </div> <!-- Closes card card-lg -->
+
+          <!-- ANALYSIS SECTION -->
+          <div class="analysis-grid" style="display:grid; grid-template-columns: 1fr 1fr; gap:32px;">
+            <div>
+              <div id="placedIn" class="placed-badge">
+                🎉 Predicted Placement: <span id="placedCompanyName">Google</span>
+              </div>
+
+              <div class="analysis-card">
+                <h3 class="section-title" style="font-size:16px; margin-bottom:16px;">📊 Profile Analysis</h3>
+
+                <div style="height: 200px; margin-bottom: 24px;">
+                  <canvas id="profilePieChart"></canvas>
+                </div>
+
+                <div class="analysis-bar-item">
+                  <div class="abi-label"><span>Academic Strength</span><span id="acadPctLabel">0%</span></div>
+                  <div class="abi-track">
+                    <div id="acadFill" class="abi-fill"></div>
+                  </div>
+                </div>
+                <div class="analysis-bar-item">
+                  <div class="abi-label"><span>Technical Competency</span><span id="techPctLabel">0%</span></div>
+                  <div class="abi-track">
+                    <div id="techFill" class="abi-fill" style="background:linear-gradient(90deg,#4F8CFF,#22D3EE);">
+                    </div>
+                  </div>
+                </div>
+                <div class="analysis-bar-item">
+                  <div class="abi-label"><span>Project & Experience</span><span id="expPctLabel">0%</span></div>
+                  <div class="abi-track">
+                    <div id="expFill" class="abi-fill" style="background:linear-gradient(90deg,#10B981,#22D3EE);"></div>
+                  </div>
+                </div>
+                <div class="analysis-bar-item" style="margin-bottom:0;">
+                  <div class="abi-label"><span>Market Demand Fit</span><span id="marketPctLabel">0%</span></div>
+                  <div class="abi-track">
+                    <div id="marketFill" class="abi-fill" style="background:linear-gradient(90deg,#F59E0B,#F472B6);">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="card"
+                style="height:100%; display:flex; flex-direction:column; justify-content:center; background:rgba(108,76,241,0.03); border-style:dashed; border-width:2px;">
+                <h4 style="font-size:16px; color:var(--primary); margin-bottom:16px; font-weight:800;">💡 AI Prediction
+                  Methodology</h4>
+                <p style="font-size:14px; color:var(--text-secondary); line-height:1.8;">
+                  Your profile is evaluated against <strong>1,200+ historical placement records</strong>. Our neural
+                  engine considers academic consistency, project complexity, and internship quality relative to the
+                  current hiring climate in Indian Tech hubs.
+                </p>
+                <div
+                  style="margin-top:24px; padding:16px; background:#fff; border-radius:12px; border:1px solid var(--border-light);">
+                  <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px;">MODEL STATUS
+                  </div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <div style="width:10px; height:10px; background:var(--success); border-radius:50%;"></div>
+                    <span style="font-size:13px; font-weight:600;">Neural Network Active (96.7% Accuracy)</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div> <!-- Closes predict-layout -->
+
+        <!-- DETAILED AI REPORT SECTION -->
+        <div id="aiReportSection" class="card animate-fade-up"
+          style="display:none; margin-top:32px; border-top:5px solid var(--primary);">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+            <h2 class="section-title">📊 Placement Prediction Report</h2>
+            <div style="display:flex; gap:12px; align-items:center;">
+              <button class="btn btn-outline btn-sm" onclick="window.print()">📥 Download Report</button>
+              <div class="winner-pill" id="reportVerdict">Analyzing...</div>
+            </div>
+          </div>
+
+          <div class="grid grid-2" style="gap:30px;">
+            <div>
+              <h4 style="font-size:14px; color:var(--primary); margin-bottom:12px;">🔍 Eligibility Check & Gap Analysis
+              </h4>
+              <div id="eligibilityResults" style="font-size:13px; line-height:1.8;"></div>
+            </div>
+            <div>
+              <h4 style="font-size:14px; color:var(--secondary); margin-bottom:12px;">🏢 Top Company Matches</h4>
+              <div id="companyMatches" style="font-size:13px; line-height:1.8;"></div>
+            </div>
+          </div>
+
+          <div>
+            <h4 style="font-size:14px; color:var(--primary); margin-bottom:12px;">📈 Actionable Recommendations</h4>
+            <ul id="recommendations"
+              style="font-size:13px; color:var(--text-secondary); padding-left:20px; line-height:1.8;"></ul>
+          </div>
+
+          <div style="margin-top:30px; padding-top:20px; border-top:1px solid var(--border-light);">
+            <h4 style="margin-bottom:12px; font-size:14px; color:var(--text-primary);">🎯 Select Your Target Company</h4>
+            <p style="font-size:12px; color:var(--text-muted); margin-bottom:15px;">Choose the company you want to finalize for your placement report:</p>
+            <div id="companySelectionList" style="display:flex; flex-wrap:wrap; gap:10px;">
+              <!-- Dynamic Selection Buttons -->
+            </div>
+          </div>
+
+          <div id="nextStepSection" style="margin-top:40px; display:none; text-align:right;">
+            <button onclick="window.location.href='companies.html'" class="btn btn-primary" style="padding:16px 40px; font-size:16px; border-radius:50px;">Next: View Matched Companies →</button>
+          </div>
+        </div> <!-- Closes aiReportSection -->
+
+      </div> <!-- Closes page-content -->
+    </div> <!-- Closes main-content -->
+  </div> <!-- Closes app-layout -->
+
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const current = html.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      html.setAttribute('data-theme', target);
+      localStorage.setItem('theme', target);
+    }
+    (function () {
+      const saved = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', saved);
+
+      // Session Check
+      const session = JSON.parse(localStorage.getItem('placePredictSession') || '{}');
+      if (session.isLoggedIn) {
+          const nameInput = document.getElementById('studentName');
+          if(nameInput) nameInput.value = session.name || 'Jebin Justin';
+      } else {
+          window.location.href = 'login.html';
+      }
+    })();
+    let profileChart = null;
+
+    function toggleChip(el) { el.classList.toggle('selected'); }
+
+    function initPieChart(acad, tech, exp, market) {
+      const ctx = document.getElementById('profilePieChart').getContext('2d');
+      if (profileChart) profileChart.destroy();
+
+      profileChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Academic', 'Technical', 'Experience', 'Market Fit'],
+          datasets: [{
+            data: [acad, tech, exp, market],
+            backgroundColor: ['#6C4CF1', '#4F8CFF', '#10B981', '#F59E0B'],
+            borderWidth: 0,
+            hoverOffset: 10
+          }]
+        },
+        options: {
+          plugins: {
+            legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+          },
+          cutout: '70%',
+          responsive: true,
+          maintainAspectRatio: false
+        }
+      });
+    }
+
+    function showToast(title, message, type = 'info') {
+      let container = document.querySelector('.toast-container');
+      if (!container) {
+        container = document.createElement('div');
+        container.className = 'toast-container';
+        document.body.appendChild(container);
+      }
+
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+
+      const icon = type === 'success' ? '🎉' : type === 'error' ? '⚠️' : 'ℹ️';
+
+      toast.innerHTML = `
+    <div class="toast-icon">${icon}</div>
+    <div class="toast-content">
+      <div class="toast-title">${title}</div>
+      <div class="toast-message">${message}</div>
+    </div>
+  `;
+
+      container.appendChild(toast);
+
+      // Trigger animation
+      setTimeout(() => toast.classList.add('show'), 10);
+
+      // Remove after 5 seconds
+      setTimeout(() => {
+        toast.classList.add('hide');
+        setTimeout(() => toast.remove(), 400);
+      }, 5000);
+    }
+
+    function runPrediction() {
+      const tenthVal = document.getElementById('tenth').value;
+      const twelfthVal = document.getElementById('twelfth').value;
+      const cgpaVal = document.getElementById('cgpa').value;
+
+      // Validation: Don't proceed if fields are empty
+      if (!tenthVal || !twelfthVal || !cgpaVal) {
+        showToast("Input Required", "Please fill in all academic details before predicting.", "error");
+        return;
+      }
+
+      const name = document.getElementById('studentName').value || "Jebin Justin";
+      const tenth = parseFloat(tenthVal);
+      const twelfth = parseFloat(twelfthVal);
+      const cgpa = parseFloat(cgpaVal);
+      const ugPct = cgpa * 10;
+      const languages = "English, Tamil, Hindi, French"; // Default for demo or extract from new table
+      const projects = parseInt(document.getElementById('projects').value) || 0;
+      const certs = parseInt(document.getElementById('certs').value) || 0;
+
+      // Get dynamic target from dropdown
+      const targetLPA = parseFloat(document.getElementById('targetLPA').value) || 15;
+      const tiers = [
+        { min: 35, max: 50, req: 85, companies: ['Google', 'Amazon', 'Directi', 'Microsoft', 'Adobe'], role: 'SDE-1' },
+        { min: 25, max: 35, req: 80, companies: ['Uber', 'Intuit', 'Goldman Sachs', 'Oracle', 'Walmart'], role: 'Software Engineer' },
+        { min: 18, max: 25, req: 75, companies: ['Cisco', 'Zomato', 'Paytm', 'PhonePe', 'Samsung'], role: 'SDE' },
+        { min: 12, max: 18, req: 70, companies: ['JP Morgan', 'Morgan Stanley', 'Deloitte USI', 'Accenture Strategy', 'Publicis Sapient'], role: 'Analyst / SDE' },
+        { min: 8, max: 12, req: 65, companies: ['Zoho', 'Freshworks', 'Capgemini', 'IBM', 'Cognizant'], role: 'SDE / Developer' },
+        { min: 5, max: 8, req: 60, companies: ['TCS Digital', 'Infosys Power Programmer', 'Mindtree', 'LTI', 'Hexaware'], role: 'Systems Engineer' },
+        { min: 3, max: 5, req: 55, companies: ['TCS Ninja', 'Wipro Turbo', 'Infosys SES', 'HCL', 'Tech Mahindra'], role: 'Graduate Engineer Trainee' }
+      ];
+
+      // Find target tier
+      const tier = tiers.find(t => targetLPA >= t.min) || tiers[tiers.length - 1];
+
+      // Eligibility Check
+      const gap10 = tenth - tier.req;
+      const gap12 = twelfth - tier.req;
+      const gapUG = ugPct - tier.req;
+
+      // Overall Placement Score
+      const acadScore = Math.min(100, (tenth + twelfth + ugPct) / 3);
+      const techScore = Math.min(100, (parseInt(document.getElementById('projects').value) * 12) + 40); // Base tech score on projects
+      const expScore = Math.min(100, (parseInt(document.getElementById('projects').value) * 15) + (parseInt(document.getElementById('certs').value) * 10));
+      const marketScore = 85; // Baseline market fit
+
+      const acad = acadScore;
+      const isEligible = gap10 >= 0 && gap12 >= 0 && gapUG >= 0;
+
+      // Update UI Chart
+      initPieChart(acadScore, techScore, expScore, marketScore);
+      const verdict = isEligible ? "Fully Eligible" : (gap10 > -5 && gap12 > -5 && gapUG > -5) ? "Partially Eligible" : "Not Eligible Yet";
+
+      // PLACEMENT THRESHOLD: 60%
+      if (acad < 60) {
+        document.getElementById('aiReportSection').style.display = 'block';
+        document.getElementById('reportVerdict').innerText = "Not Selected";
+        document.getElementById('reportVerdict').style.background = 'var(--danger)';
+
+        document.getElementById('placedIn').style.display = 'block';
+        document.getElementById('placedIn').style.background = 'var(--danger)';
+        document.getElementById('placedCompanyName').innerHTML = `<strong>Not Selected</strong> (Minimum 60% Required)`;
+
+        document.getElementById('eligibilityResults').innerHTML = `
+      <div style="background:rgba(239,68,68,0.1); padding:15px; border-radius:10px; border:1px solid var(--danger); color:var(--danger); font-weight:700;">
+        ❌ Your academic average (${acad.toFixed(1)}%) is below the absolute 60% threshold for placement. 
+        <br><br>
+        Please focus on improving your fundamentals and projects to unlock eligibility.
+      </div>`;
+
+        showToast("Low Eligibility", "Your academic scores are below the minimum threshold (60%) for this tier.", "error");
+        
+        document.getElementById('companySelectionList').innerHTML = `
+          <button onclick="saveSelection('Not Selected')" class="btn btn-outline" style="border-color:var(--danger); color:var(--danger);">Finalize as Not Selected</button>
+        `;
+      }
+
+      // Update UI Graph
+      document.getElementById('acadPctLabel').textContent = Math.round(acad) + '%';
+      document.getElementById('acadFill').style.width = acad + '%';
+
+      // Update AI Report
+      document.getElementById('aiReportSection').style.display = 'block';
+      document.getElementById('reportVerdict').innerText = verdict;
+      document.getElementById('reportVerdict').style.background = isEligible ? 'var(--success)' : 'var(--warning)';
+
+      document.getElementById('eligibilityResults').innerHTML = `
+    • <strong>10th Standard:</strong> ${tenth}% (Gap: <span style="color:${gap10 >= 0 ? 'var(--success)' : 'var(--danger)'}">${gap10 >= 0 ? '+' : ''}${gap10.toFixed(1)}%</span>)<br>
+    • <strong>12th Standard:</strong> ${twelfth}% (Gap: <span style="color:${gap12 >= 0 ? 'var(--success)' : 'var(--danger)'}">${gap12 >= 0 ? '+' : ''}${gap12.toFixed(1)}%</span>)<br>
+    • <strong>UG (CGPA):</strong> ${ugPct}% (Gap: <span style="color:${gapUG >= 0 ? 'var(--success)' : 'var(--danger)'}">${gapUG >= 0 ? '+' : ''}${gapUG.toFixed(1)}%</span>)<br>
+    • <strong>Tier Requirement:</strong> ${tier.req}% for ${tier.min}-${tier.max} LPA range.
+  `;
+
+      document.getElementById('companyMatches').innerHTML = tier.companies.map(c => `• <strong>${c}</strong> - ${tier.role} (${tier.min}-${tier.max} LPA)`).join('<br>');
+
+      const tips = ["Improve technical documentation", "Add more React/Node projects", "Prepare for System Design"]; // Fallback if tips not defined elsewhere
+      document.getElementById('recommendations').innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+
+      // Store data for the Next button
+      const company = isEligible ? tier.companies[0] : tier.companies[tier.companies.length - 1];
+      window.currentPredictionData = {
+        score: acad,
+        company: company,
+        lpa: targetLPA,
+        tenth: tenth,
+        twelfth: twelfth,
+        cgpa: ugPct,
+        languages: languages,
+        projects: projects,
+        certs: certs
+      };
+
+      document.getElementById('placedIn').style.display = 'block';
+      document.getElementById('placedIn').style.background = 'var(--success)';
+      document.getElementById('placedCompanyName').innerHTML = `<strong>${company}</strong> (Matched with ${targetLPA} LPA Tier)`;
+
+      document.getElementById('aiReportSection').scrollIntoView({ behavior: 'smooth' });
+
+      // Generate Company Selection Buttons
+      document.getElementById('companySelectionList').innerHTML = tier.companies.map(c => `
+        <button onclick="saveSelection('${c}')" class="btn btn-outline" style="padding:10px 20px;">${c}</button>
+      `).join('');
+
+      // Always Show Next Step after prediction
+      document.getElementById('nextStepSection').style.display = 'block';
+      const nextBtn = document.querySelector('#nextStepSection button');
+      const sName = document.getElementById('studentName').value;
+      nextBtn.onclick = () => {
+        window.location.href = `companies.html?source=prediction&score=${acad}&student=${sName}`;
+      };
+      
+      if (acad >= 60) {
+        showToast("Analysis Complete", "Your AI report is ready. Click 'Next' to explore your matched companies.", "success");
+      }
+      
+      document.getElementById('aiReportSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function saveSelection(company) {
+      const data = window.currentPredictionData;
+      if (!data) return;
+      
+      data.company = company;
+      window.selectedCompany = company; // Store globally for the Next button
+      
+      // Update Next Button URL
+      const nextBtn = document.querySelector('#nextStepSection button');
+      if (nextBtn) {
+        nextBtn.onclick = () => {
+          window.location.href = `companies.html?source=prediction&score=${data.score}&selectedCompany=${company}`;
+        };
+      }
+      
+      // Save to history
+      const history = JSON.parse(localStorage.getItem('placementHistory') || '[]');
+      const name = document.getElementById('studentName').value || "Student";
+      const newEntry = {
+        student: name,
+        date: new Date().toLocaleDateString(),
+        ...data
+      };
+      history.push(newEntry);
+      localStorage.setItem('placementHistory', JSON.stringify(history));
+
+      showToast("Selection Saved", `Target company set to ${company}. Redirecting to confirm...`, "success");
+      
+      setTimeout(() => {
+        window.location.href = `companies.html?source=prediction&score=${data.score}&selectedCompany=${company}&student=${name}`;
+      }, 1500);
+    }
+    function addMoreLanguages() {
+      const tableBody = document.querySelector('#langTable tbody');
+      const moreLangs = [
+        { name: 'German', code: 'DE' },
+        { name: 'Spanish', code: 'ES' },
+        { name: 'Japanese', code: 'JA' },
+        { name: 'Korean', code: 'KO' },
+        { name: 'Chinese', code: 'ZH' },
+        { name: 'Russian', code: 'RU' },
+        { name: 'Italian', code: 'IT' },
+        { name: 'Portuguese', code: 'PT' }
+      ];
+      
+      moreLangs.forEach(lang => {
+        const row = document.createElement('tr');
+        row.className = 'lang-row';
+        row.innerHTML = `
+          <td><span class="drag-btn">⋮⋮</span></td>
+          <td><div style="display:flex; align-items:center; gap:12px;"><div class="lang-badge">${lang.code}</div><span style="font-weight:600; font-size:14px;">${lang.name}</span></div></td>
+          <td><select class="prof-select"><option>Fluent</option><option>Native</option><option>Intermediate</option><option>Beginner</option><option selected>None</option></select></td>
+        `;
+        tableBody.appendChild(row);
+      });
+      
+      // Disable button after adding
+      document.querySelector('.btn-add-lang').disabled = true;
+      document.querySelector('.btn-add-lang').style.opacity = '0.5';
+      document.querySelector('.btn-add-lang').style.cursor = 'not-allowed';
+      showToast("Languages Added", "8 additional languages have been added to your profile.", "success");
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>PlacePredict – Prediction History</title>
+<link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="glow-bg"></div><div class="glow-bg2"></div>
+<div class="app-layout">
+<aside class="sidebar">
+    <div class="logo-text">Place <span>Predict</span></div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <a href="dashboard.html" class="nav-item"><span class="nav-icon">🏠</span><span class="nav-label">Dashboard</span></a>
+    <a href="predict.html" class="nav-item"><span class="nav-icon">🔮</span><span class="nav-label">Predict Placement</span></a>
+    <a href="compare.html" class="nav-item"><span class="nav-icon">⚖️</span><span class="nav-label">Student Comparison</span></a>
+    <div class="nav-section-label">Assessment</div>
+    <a href="assessment.html" class="nav-item"><span class="nav-icon">🧩</span><span class="nav-label">Skill Assessment</span></a>
+    <div class="nav-section-label">Opportunities</div>
+    <a href="companies.html" class="nav-item"><span class="nav-icon">🏢</span><span class="nav-label">Companies</span></a>
+    <div class="nav-section-label">Reports</div>
+    <a href="analytics.html" class="nav-item"><span class="nav-icon">📊</span><span class="nav-label">Placement Reports</span></a>
+    <a href="history.html" class="nav-item active"><span class="nav-icon">📜</span><span class="nav-label">Prediction History</span></a>
+    <a href="settings.html" class="nav-item"><span class="nav-icon">⚙️</span><span class="nav-label">Settings</span></a>
+  </nav>
+</aside>
+
+<div class="main-content">
+  <nav class="navbar">
+    <div class="navbar-title">Prediction <span>History</span></div>
+    <div class="navbar-actions">
+      <div class="icon-btn" onclick="location.reload()">🔄</div>
+      <div class="user-avatar">J</div>
+    </div>
+  </nav>
+
+  <div class="page-content">
+    <div class="page-header">
+      <h1 class="page-title">Your Placement History</h1>
+      <p class="page-subtitle">Track your predictions and selected company matches</p>
+    </div>
+
+    <div id="historyList" class="grid grid-1" style="gap:16px;">
+      <!-- History Items -->
+    </div>
+
+    <div id="noHistory" class="card" style="text-align:center; padding:60px; display:none;">
+      <div style="font-size:48px; margin-bottom:20px;">📜</div>
+      <h3>No history found</h3>
+      <p style="color:var(--text-muted);">You haven't selected any companies yet. Start by making a prediction!</p>
+      <a href="predict.html" class="btn btn-primary" style="display:inline-block; margin-top:20px;">Start Prediction</a>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function loadHistory() {
+  const history = JSON.parse(localStorage.getItem('placementHistory') || '[]');
+  const list = document.getElementById('historyList');
+  const empty = document.getElementById('noHistory');
+
+  if (history.length === 0) {
+    empty.style.display = 'block';
+    list.style.display = 'none';
+    return;
+  }
+
+  list.innerHTML = history.reverse().map(item => {
+    const logoMap = {
+      'Google': 'assets/google.png',
+      'Meta': 'assets/meta.png',
+      'Microsoft': 'assets/microsoft.png',
+      'Amazon': 'assets/amazon.png',
+      'TCS': 'assets/tcs.png',
+      'Infosys': 'assets/infosys.png'
+    };
+    const logoSrc = logoMap[item.company] || '';
+    const logoHtml = logoSrc 
+      ? `<img src="${logoSrc}" alt="${item.company}" style="width:100%; height:100%; object-fit:contain; padding:6px;">`
+      : '🏢';
+
+    return `
+    <div class="card animate-fade-up" style="display:flex; justify-content:space-between; align-items:center;">
+      <div style="display:flex; align-items:center; gap:20px;">
+        <div style="width:50px; height:50px; background:#fff; border:1px solid var(--border-light); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:24px; overflow:hidden;">
+          ${logoHtml}
+        </div>
+        <div>
+          <h4 style="margin-bottom:4px;">${item.company}</h4>
+          <div style="font-size:12px; color:var(--text-muted);">
+            <span style="color:var(--primary); font-weight:700;">👤 ${item.student || 'Jebin Justin'}</span> &bull;
+            <span>📅 ${item.date}</span> &bull; 
+            <span style="color:var(--success); font-weight:700;">💰 ${item.lpa} LPA</span>
+          </div>
+        </div>
+      </div>
+      <div style="text-align:right;">
+        <div class="winner-pill" style="background:var(--success);">Selected</div>
+        <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Prediction Score: ${item.score}%</div>
+      </div>
+    </div>
+    `;
+  }).join('');
+}
+
+window.onload = loadHistory;
+</script>
+</body>
+</html>
